@@ -9,6 +9,7 @@ import Sidebar from "./Sidebar";
 import DashboardHomeScreen from "./dashboard-screens/home";
 import DashboardProfileScreen from "./dashboard-screens/profile";
 import DashboardHistoryScreen from "./dashboard-screens/history";
+import Popup from "./Popup"; // New Popup component
 
 type Profile = {
   id: string;
@@ -27,10 +28,15 @@ type Screen = "home" | "profile" | "history" | "exercises";
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [currentScreen, setCurrentScreen] = useState<Screen>("home");
+  const [showPopup, setShowPopup] = useState(false); // State to control popup visibility
   const router = useRouter();
 
   const handleScreenChange = (screen: Screen) => {
     setCurrentScreen(screen);
+  };
+
+  const togglePopup = () => {
+    setShowPopup(!showPopup); // Toggle popup visibility
   };
 
   useEffect(() => {
@@ -104,6 +110,7 @@ export default function Dashboard() {
         name={profile?.name}
         currentScreen={currentScreen}
         handleScreenChange={handleScreenChange}
+        togglePopup={togglePopup} // Pass togglePopup to Sidebar
       />
       {currentScreen === "home" ? (
         <DashboardHomeScreen
@@ -118,6 +125,8 @@ export default function Dashboard() {
       ) : (
         <DashboardHistoryScreen />
       )}
+      {showPopup && <Popup onClose={togglePopup} userId={profile.id} />}{" "}
+      {/* Render Popup */}
     </div>
   );
 }

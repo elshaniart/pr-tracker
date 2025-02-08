@@ -26,7 +26,7 @@ export default function Onboarding() {
       }
 
       // Update the profile with onboarding data
-      const { error } = await supabase
+      const { error: profileError } = await supabase
         .from("profiles")
         .update({
           name,
@@ -40,8 +40,36 @@ export default function Onboarding() {
         })
         .eq("id", userData.user.id);
 
-      if (error) {
-        throw new Error(error.message);
+      if (profileError) {
+        throw new Error(profileError.message);
+      }
+
+      // Insert PRs into the `prs` table
+      const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+
+      const { error: prError } = await supabase.from("prs").insert([
+        {
+          exercise: "bench",
+          value_kg: benchPressPr,
+          date: today,
+          user_id: userData.user.id,
+        },
+        {
+          exercise: "squat",
+          value_kg: squatPr,
+          date: today,
+          user_id: userData.user.id,
+        },
+        {
+          exercise: "deadlift",
+          value_kg: deadliftPr,
+          date: today,
+          user_id: userData.user.id,
+        },
+      ]);
+
+      if (prError) {
+        throw new Error(prError.message);
       }
 
       // Redirect to the dashboard after successful onboarding
