@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../helper/supabaseClient";
-import { signInWithGoogle } from "../helper/authHelpers"; // Import the helper function
+import { signInWithGoogle } from "../helper/authHelpers";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -32,7 +32,6 @@ export default function LoginPage() {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        // Handle cases where the error is not an Error object
         setError("An unknown error occurred");
       }
     }
@@ -68,10 +67,19 @@ export default function LoginPage() {
       </form>
       <button
         onClick={handleGoogleSignIn}
-        className="w-64 bg-red-500 text-white p-2 rounded hover:bg-red-600"
+        className="w-64 bg-red-500 text-white p-2 rounded hover:bg-red-600 mb-4"
       >
         Sign In with Google
       </button>
+      <span className="text-sm text-gray-600">
+        Don't have an account?{" "}
+        <span
+          onClick={() => router.push("/register")}
+          className="text-blue-500 hover:underline cursor-pointer"
+        >
+          Register.
+        </span>
+      </span>
     </div>
   );
 }
