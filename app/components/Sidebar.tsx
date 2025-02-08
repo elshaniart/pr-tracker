@@ -1,7 +1,12 @@
 import React from "react";
 import plusIcon from "../icons/plusIcon.svg";
 
-const Sidebar = ({ signOut, name = "" }) => {
+interface SidebarProps {
+  signOut: () => void;
+  name: string | null;
+}
+
+const Sidebar = ({ signOut, name = "" }: SidebarProps) => {
   return (
     <div className="h-full p-[32px] w-[328px]">
       <div className="w-full h-full rounded-2xl bg-[#060B26] px-4 py-8 flex flex-col justify-between">
