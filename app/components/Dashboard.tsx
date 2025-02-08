@@ -19,9 +19,16 @@ type Profile = {
   name: string | null;
 };
 
+type Screen = "home" | "profile" | "history" | "exercises";
+
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [currentScreen, setCurrentScreen] = useState<Screen>("home");
   const router = useRouter();
+
+  const handleScreenChange = (screen: Screen) => {
+    setCurrentScreen(screen);
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -88,15 +95,12 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-row items-center min-h- w-screen h-screen">
-      <Sidebar signOut={signOut} name={profile?.name} />
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <p className="mb-4">Welcome to your dashboard!</p>
-      <button
-        onClick={signOut}
-        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-      >
-        Sign Out
-      </button>
+      <Sidebar
+        signOut={signOut}
+        name={profile?.name}
+        currentScreen={currentScreen}
+        handleScreenChange={handleScreenChange}
+      />
     </div>
   );
 }
