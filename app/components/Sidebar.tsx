@@ -17,7 +17,7 @@ const Sidebar = ({
   handleScreenChange,
 }: SidebarProps) => {
   return (
-    <div className="h-full p-[32px] w-[328px]">
+    <div className="h-full p-[32px] w-[384px]">
       <div className="w-full h-full rounded-2xl bg-[#060B26] px-4 py-8 flex flex-col justify-between">
         <div className="flex flex-col gap-8 w-full text-white">
           <h1 className="text-2xl text-center">PR Tracker</h1>

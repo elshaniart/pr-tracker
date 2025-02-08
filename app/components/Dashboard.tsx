@@ -82,6 +82,7 @@ export default function Dashboard() {
         setProfile(newProfile);
       } else {
         setProfile(profileData);
+        console.log(profileData);
       }
     };
 
@@ -105,7 +106,13 @@ export default function Dashboard() {
         handleScreenChange={handleScreenChange}
       />
       {currentScreen === "home" ? (
-        <DashboardHomeScreen />
+        <DashboardHomeScreen
+          bench_press_pr={profile?.bench_press_pr}
+          deadlift_pr={profile?.deadlift_pr}
+          height_cm={profile?.height_cm}
+          squat_pr={profile?.squat_pr}
+          weight_kg={profile?.weight_kg}
+        />
       ) : currentScreen === "profile" ? (
         <DashboardProfileScreen />
       ) : (
