@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../helper/supabaseClient";
 
-export default function Onboarding() {
+interface OnboardingProps {
+  onComplete: () => void; // Callback function to notify parent
+}
+
+export default function Onboarding({ onComplete }: OnboardingProps) {
   const [name, setName] = useState("");
   const [heightCm, setHeightCm] = useState<number | null>(null);
   const [weightKg, setWeightKg] = useState<number | null>(null);
@@ -72,8 +76,8 @@ export default function Onboarding() {
         throw new Error(prError.message);
       }
 
-      // Redirect to the dashboard after successful onboarding
-      router.push("/");
+      // Notify the parent that onboarding is complete
+      onComplete();
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -84,73 +88,82 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4">Onboarding</h1>
-      <form onSubmit={handleSubmit} className="w-64">
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        <input
-          type="number"
-          placeholder="Height (cm)"
-          value={heightCm ?? ""}
-          onChange={(e) => setHeightCm(Number(e.target.value))}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        <input
-          type="number"
-          placeholder="Weight (kg)"
-          value={weightKg ?? ""}
-          onChange={(e) => setWeightKg(Number(e.target.value))}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        <input
-          type="date"
-          placeholder="Birthday"
-          value={birthday}
-          onChange={(e) => setBirthday(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        <input
-          type="number"
-          placeholder="Bench Press PR (kg)"
-          value={benchPressPr ?? ""}
-          onChange={(e) => setBenchPressPr(Number(e.target.value))}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        <input
-          type="number"
-          placeholder="Squat PR (kg)"
-          value={squatPr ?? ""}
-          onChange={(e) => setSquatPr(Number(e.target.value))}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        <input
-          type="number"
-          placeholder="Deadlift PR (kg)"
-          value={deadliftPr ?? ""}
-          onChange={(e) => setDeadliftPr(Number(e.target.value))}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          Submit
-        </button>
-      </form>
+    <div className="flex flex-col items-center justify-center min-h-screen min-w-full">
+      <div className="bg-[#060B26] p-4 text-white rounded-xl">
+        <h1 className="text-2xl font-bold mb-4 text-center">Onboarding</h1>
+        <form onSubmit={handleSubmit} className="w-96">
+          <label>Full Name</label>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            required
+          />
+          <label>Height in cm</label>
+          <input
+            type="number"
+            placeholder="Height (cm)"
+            value={heightCm ?? ""}
+            onChange={(e) => setHeightCm(Number(e.target.value))}
+            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            required
+          />
+          <label>Weight in kg</label>
+          <input
+            type="number"
+            placeholder="Weight (kg)"
+            value={weightKg ?? ""}
+            onChange={(e) => setWeightKg(Number(e.target.value))}
+            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            required
+          />
+          <label>Birthday</label>
+          <input
+            type="date"
+            placeholder="Birthday"
+            value={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
+            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            required
+          />
+          <label>Bench Press PR</label>
+          <input
+            type="number"
+            placeholder="Bench Press PR (kg)"
+            value={benchPressPr ?? ""}
+            onChange={(e) => setBenchPressPr(Number(e.target.value))}
+            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            required
+          />
+          <label>Squat PR</label>
+          <input
+            type="number"
+            placeholder="Squat PR (kg)"
+            value={squatPr ?? ""}
+            onChange={(e) => setSquatPr(Number(e.target.value))}
+            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            required
+          />
+          <label>Deadlift PR</label>
+          <input
+            type="number"
+            placeholder="Deadlift PR (kg)"
+            value={deadliftPr ?? ""}
+            onChange={(e) => setDeadliftPr(Number(e.target.value))}
+            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            required
+          />
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

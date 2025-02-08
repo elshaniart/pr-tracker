@@ -15,12 +15,22 @@ const DashboardHistoryScreen = () => {
   const [filteredPRs, setFilteredPRs] = useState<PR[]>([]); // State for filtered PRs
   const [selectedExercise, setSelectedExercise] = useState<string>("all"); // State for selected exercise filter
 
-  // Fetch all PRs from the database
+  // Fetch PRs for the currently logged-in user
   useEffect(() => {
     const fetchPRs = async () => {
+      // Get the current user
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
+      if (!userData?.user || userError) {
+        console.error("Error fetching user:", userError);
+        return;
+      }
+
+      // Fetch PRs for the current user
       const { data, error } = await supabase
         .from("prs")
         .select("*")
+        .eq("user_id", userData.user.id) // Filter by the user's ID
         .order("date", { ascending: false }); // Sort by date (newest first)
 
       if (error) {

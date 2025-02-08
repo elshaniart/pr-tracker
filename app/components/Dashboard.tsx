@@ -9,7 +9,7 @@ import Sidebar from "./Sidebar";
 import DashboardHomeScreen from "./dashboard-screens/home";
 import DashboardProfileScreen from "./dashboard-screens/profile";
 import DashboardHistoryScreen from "./dashboard-screens/history";
-import Popup from "./Popup"; // New Popup component
+import Popup from "./Popup";
 
 type Profile = {
   id: string;
@@ -28,7 +28,8 @@ type Screen = "home" | "profile" | "history" | "exercises";
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [currentScreen, setCurrentScreen] = useState<Screen>("home");
-  const [showPopup, setShowPopup] = useState(false); // State to control popup visibility
+  const [showPopup, setShowPopup] = useState(false);
+  const [isOnboardingComplete, setIsOnboardingComplete] = useState(false); // State for onboarding completion
   const router = useRouter();
 
   const handleScreenChange = (screen: Screen) => {
@@ -36,12 +37,21 @@ export default function Dashboard() {
   };
 
   const togglePopup = () => {
-    setShowPopup(!showPopup); // Toggle popup visibility
+    setShowPopup(!showPopup);
+  };
+
+  // Function to update the profile state
+  const handleProfileUpdate = (updatedProfile: Profile) => {
+    setProfile(updatedProfile);
+  };
+
+  // Function to handle onboarding completion
+  const handleOnboardingComplete = () => {
+    setIsOnboardingComplete(true);
   };
 
   useEffect(() => {
     const fetchProfile = async () => {
-      // Step 1: Get the current user
       const { data: userData, error: userError } =
         await supabase.auth.getUser();
       if (!userData?.user || userError) {
@@ -49,19 +59,17 @@ export default function Dashboard() {
         return;
       }
 
-      // Step 2: Fetch the user's profile
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", userData.user.id)
-        .maybeSingle(); // ✅ Prevents errors when no profile exists
+        .maybeSingle();
 
       if (profileError) {
         console.error("Error fetching profile:", profileError);
         return;
       }
 
-      // Step 3: If no profile exists, create one
       if (!profileData) {
         const { data: newProfile, error: createError } = await supabase
           .from("profiles")
@@ -74,7 +82,7 @@ export default function Dashboard() {
               bench_press_pr: null,
               squat_pr: null,
               deadlift_pr: null,
-              onboarded: false, // Default to false
+              onboarded: false,
             },
           ])
           .select()
@@ -88,7 +96,6 @@ export default function Dashboard() {
         setProfile(newProfile);
       } else {
         setProfile(profileData);
-        console.log(profileData);
       }
     };
 
@@ -99,8 +106,8 @@ export default function Dashboard() {
     return <p>Loading...</p>;
   }
 
-  if (!profile.onboarded) {
-    return <Onboarding />;
+  if (!profile.onboarded && !isOnboardingComplete) {
+    return <Onboarding onComplete={handleOnboardingComplete} />;
   }
 
   return (
@@ -110,7 +117,7 @@ export default function Dashboard() {
         name={profile?.name}
         currentScreen={currentScreen}
         handleScreenChange={handleScreenChange}
-        togglePopup={togglePopup} // Pass togglePopup to Sidebar
+        togglePopup={togglePopup}
       />
       {currentScreen === "home" ? (
         <DashboardHomeScreen
@@ -121,12 +128,14 @@ export default function Dashboard() {
           weight_kg={profile?.weight_kg}
         />
       ) : currentScreen === "profile" ? (
-        <DashboardProfileScreen />
+        <DashboardProfileScreen
+          profile={profile}
+          setProfile={handleProfileUpdate}
+        />
       ) : (
         <DashboardHistoryScreen />
       )}
-      {showPopup && <Popup onClose={togglePopup} userId={profile.id} />}{" "}
-      {/* Render Popup */}
+      {showPopup && <Popup onClose={togglePopup} userId={profile.id} />}
     </div>
   );
 }
