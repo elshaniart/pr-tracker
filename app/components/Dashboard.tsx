@@ -6,6 +6,9 @@ import supabase from "../helper/supabaseClient";
 import { signOut } from "../helper/authHelpers";
 import Onboarding from "./Onboarding";
 import Sidebar from "./Sidebar";
+import DashboardHomeScreen from "./dashboard-screens/home";
+import DashboardProfileScreen from "./dashboard-screens/profile";
+import DashboardHistoryScreen from "./dashboard-screens/history";
 
 type Profile = {
   id: string;
@@ -101,6 +104,13 @@ export default function Dashboard() {
         currentScreen={currentScreen}
         handleScreenChange={handleScreenChange}
       />
+      {currentScreen === "home" ? (
+        <DashboardHomeScreen />
+      ) : currentScreen === "profile" ? (
+        <DashboardProfileScreen />
+      ) : (
+        <DashboardHistoryScreen />
+      )}
     </div>
   );
 }
