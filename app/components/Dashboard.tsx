@@ -111,7 +111,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex flex-row items-center min-h- w-screen h-screen">
+    <div className="flex flex-row items-center min-h- w-screen h-screen overflow-x-hidden">
       <Sidebar
         signOut={signOut}
         name={profile?.name}

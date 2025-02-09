@@ -105,7 +105,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
               type="number"
               value={valueKg || ""}
               onChange={(e) => setValueKg(parseFloat(e.target.value))}
-              className="w-full p-2 rounded-lg bg-[#1A1F37] text-white"
+              className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
               required
             />
           </div>
@@ -117,7 +117,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full p-2 rounded-lg bg-[#1A1F37] text-white"
+              className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
               required
             />
           </div>
@@ -125,13 +125,13 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+              className="px-4 py-2 bg-gray-500 text-white rounded-lg h-[48px]"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#0075FF] text-white rounded-lg"
+              className="px-4 py-2 bg-[#0075FF] text-white rounded-lg h-[48px]"
             >
               Save
             </button>

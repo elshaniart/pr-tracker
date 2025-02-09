@@ -56,7 +56,7 @@ const DashboardHistoryScreen = () => {
 
   return (
     <div className="w-full h-full text-white py-8 flex flex-col gap-8">
-      <h2 className="text-2xl">PR History</h2>
+      <h2 className="text-2xl font-semibold">PR History</h2>
 
       {/* Filter by Exercise */}
       <div className="flex gap-4">

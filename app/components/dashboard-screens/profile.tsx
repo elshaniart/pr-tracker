@@ -74,7 +74,7 @@ const DashboardProfileScreen = ({
 
   return (
     <div className="w-full h-full text-white py-8 flex flex-col gap-8">
-      <h2 className="text-2xl">Profile</h2>
+      <h2 className="text-2xl font-semibold">Profile</h2>
 
       {error && <p className="text-red-500">{error}</p>}
 
@@ -87,7 +87,7 @@ const DashboardProfileScreen = ({
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white"
+            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
             disabled={!isEditing}
           />
         </div>
@@ -99,7 +99,7 @@ const DashboardProfileScreen = ({
             type="number"
             value={heightCm ?? ""}
             onChange={(e) => setHeightCm(Number(e.target.value))}
-            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white"
+            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
             disabled={!isEditing}
           />
         </div>
@@ -111,7 +111,7 @@ const DashboardProfileScreen = ({
             type="number"
             value={weightKg ?? ""}
             onChange={(e) => setWeightKg(Number(e.target.value))}
-            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white"
+            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
             disabled={!isEditing}
           />
         </div>
@@ -123,7 +123,7 @@ const DashboardProfileScreen = ({
             type="date"
             value={birthday}
             onChange={(e) => setBirthday(e.target.value)}
-            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white"
+            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
             disabled={!isEditing}
           />
         </div>
@@ -134,13 +134,13 @@ const DashboardProfileScreen = ({
           <>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-[#0075FF] text-white rounded-lg"
+              className="px-4 py-2 bg-[#0075FF] text-white rounded-lg h-[48px]"
             >
               Save
             </button>
             <button
               onClick={() => setIsEditing(false)}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+              className="px-4 py-2 bg-gray-500 text-white rounded-lg h-[48px]"
             >
               Cancel
             </button>
@@ -148,7 +148,7 @@ const DashboardProfileScreen = ({
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="px-4 py-2 bg-[#0075FF] text-white rounded-lg"
+            className="px-4 py-2 bg-[#0075FF] text-white rounded-lg h-[48px]"
           >
             Edit Profile
           </button>

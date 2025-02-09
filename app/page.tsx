@@ -7,6 +7,10 @@ import { User } from "@supabase/supabase-js";
 import { signInWithGoogle } from "./helper/authHelpers"; // Import the signInWithGoogle function
 import Dashboard from "./components/Dashboard";
 
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
+
 export default function Home() {
   const [user, setUser] = useState<User | null>(null); // State to store the user's authentication status
   const router = useRouter(); // Next.js router for navigation
@@ -54,7 +58,9 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#56577A]">
+    <div
+      className={`flex flex-col items-center justify-center min-h-screen bg-[#15162e] ${montserrat.className}`}
+    >
       {user ? (
         // If the user is signed in, show the Dashboard
         <Dashboard />
