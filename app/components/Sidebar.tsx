@@ -1,5 +1,13 @@
-import React from "react";
-import { Home, Plus, History, UserPen, LogOut } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Home,
+  Plus,
+  History,
+  UserPen,
+  LogOut,
+  ToggleLeft,
+  ToggleRight,
+} from "lucide-react";
 
 type Screen = "home" | "profile" | "history" | "exercises";
 
@@ -9,6 +17,8 @@ interface SidebarProps {
   currentScreen: string;
   handleScreenChange: (screen: Screen) => void;
   togglePopup: () => void;
+  thiefOfJoy: boolean;
+  onThiefOfJoyToggle: (newValue: boolean) => void;
 }
 
 const Sidebar = ({
@@ -17,7 +27,24 @@ const Sidebar = ({
   currentScreen,
   handleScreenChange,
   togglePopup,
+  thiefOfJoy,
+  onThiefOfJoyToggle,
 }: SidebarProps) => {
+  const [isSwitchDisabled, setIsSwitchDisabled] = useState(false);
+
+  const handleThiefOfJoyToggle = async () => {
+    if (isSwitchDisabled) return; // Prevent rapid toggling
+
+    setIsSwitchDisabled(true); // Disable the switch
+    const newValue = !thiefOfJoy;
+    onThiefOfJoyToggle(newValue); // Update the profile
+
+    // Re-enable the switch after 1 second
+    setTimeout(() => {
+      setIsSwitchDisabled(false);
+    }, 1000);
+  };
+
   return (
     <div className="h-full p-[32px] min-w-[336px]">
       <div className="w-full h-full rounded-2xl bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] px-4 py-8 flex flex-col justify-between">
@@ -79,6 +106,23 @@ const Sidebar = ({
               <p>Profile</p>
             </button>
           </div>
+          {/* Thief of Joy Switch */}
+          <button
+            onClick={handleThiefOfJoyToggle}
+            disabled={isSwitchDisabled}
+            className="flex flex-row gap-4 px-2 rounded-2xl hover:bg-[#1A1F37] transition-all ease-in-out py-2 items-center text-lg"
+          >
+            <div
+              className={`flex justify-center items-center rounded-2xl w-[44px] h-[32px] text-2xl`}
+            >
+              {thiefOfJoy ? (
+                <ToggleRight color="#01B574" size={32} />
+              ) : (
+                <ToggleLeft color="#E31A1A" size={32} />
+              )}
+            </div>
+            <p>Thief of Joy</p>
+          </button>
         </div>
         <div className="flex flex-col gap-8 text-white">
           <p className="text-center">Signed in as: {name}</p>

@@ -21,6 +21,7 @@ type Profile = {
   deadlift_pr: number | null;
   onboarded: boolean;
   name: string | null;
+  thiefOfJoy: boolean; // Add thiefOfJoy to the Profile type
 };
 
 type Screen = "home" | "profile" | "history" | "exercises";
@@ -29,7 +30,7 @@ export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [currentScreen, setCurrentScreen] = useState<Screen>("home");
   const [showPopup, setShowPopup] = useState(false);
-  const [isOnboardingComplete, setIsOnboardingComplete] = useState(false); // State for onboarding completion
+  const [isOnboardingComplete, setIsOnboardingComplete] = useState(false);
   const router = useRouter();
 
   const handleScreenChange = (screen: Screen) => {
@@ -48,6 +49,27 @@ export default function Dashboard() {
   // Function to handle onboarding completion
   const handleOnboardingComplete = () => {
     setIsOnboardingComplete(true);
+  };
+
+  // Function to toggle thiefOfJoy
+  const handleThiefOfJoyToggle = async (newValue: boolean) => {
+    if (!profile) return;
+
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ thiefofjoy: newValue })
+        .eq("id", profile.id);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      // Update the local profile state
+      setProfile({ ...profile, thiefOfJoy: newValue });
+    } catch (error) {
+      console.error("Error updating thiefOfJoy:", error);
+    }
   };
 
   useEffect(() => {
@@ -83,6 +105,7 @@ export default function Dashboard() {
               squat_pr: null,
               deadlift_pr: null,
               onboarded: false,
+              thiefOfJoy: false, // Default value for new profiles
             },
           ])
           .select()
@@ -118,6 +141,8 @@ export default function Dashboard() {
         currentScreen={currentScreen}
         handleScreenChange={handleScreenChange}
         togglePopup={togglePopup}
+        thiefOfJoy={profile.thiefOfJoy}
+        onThiefOfJoyToggle={handleThiefOfJoyToggle}
       />
       {currentScreen === "home" ? (
         <DashboardHomeScreen
