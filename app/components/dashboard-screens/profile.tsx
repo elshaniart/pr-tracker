@@ -5,7 +5,6 @@ import supabase from "../../helper/supabaseClient";
 
 interface Profile {
   id: string;
-  name: string | null;
   height_cm: number | null;
   weight_kg: number | null;
   birthday: string | null;
@@ -13,6 +12,8 @@ interface Profile {
   squat_pr: number | null;
   deadlift_pr: number | null;
   onboarded: boolean;
+  name: string | null;
+  thiefOfJoy: boolean;
 }
 
 interface DashboardProfileScreenProps {

@@ -151,6 +151,7 @@ export default function Dashboard() {
           height_cm={profile?.height_cm}
           squat_pr={profile?.squat_pr}
           weight_kg={profile?.weight_kg}
+          profile={profile}
         />
       ) : currentScreen === "profile" ? (
         <DashboardProfileScreen

@@ -125,7 +125,9 @@ const Sidebar = ({
           </button>
         </div>
         <div className="flex flex-col gap-8 text-white">
-          <p className="text-center">Signed in as: {name}</p>
+          <p className="text-center">
+            Signed in as: <b>{name}</b>
+          </p>
           <button
             onClick={signOut}
             className="flex flex-row gap-4 px-2 rounded-2xl bg-[#1A1F37] hover:bg-[#3d4257] transition-all ease-in-out py-2 items-center text-lg"

@@ -29,18 +29,44 @@ interface PRData {
 
 interface LineChartProps {
   prData: PRData[];
+  thiefOfJoy: boolean; // Add thiefOfJoy as a prop
+  exerciseType: string;
 }
 
-const LineChart = ({ prData }: LineChartProps) => {
+const LineChart = ({ prData, thiefOfJoy, exerciseType }: LineChartProps) => {
+  // Define average lifts for each exercise type
+  const averageLifts: { [key: string]: number } = {
+    bench: 70, // Example for bench press
+    squat: 100, // Example for squat
+    deadlift: 120, // Example for deadlift
+  };
+
+  console.log(exerciseType);
+
+  // Get the appropriate average lift for the selected exercise
+  const averageLift = averageLifts[exerciseType] || 100; // Default to 100 if no match
+
   const lineChartData = {
     labels: prData.map((pr) => pr.date), // Use dates as labels
     datasets: [
       {
-        label: "PR (kg)",
+        label: "Your PR (kg)",
         data: prData.map((pr) => pr.value_kg), // Use PR values as data
         borderColor: "rgb(75, 192, 192)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
       },
+      // Add a second dataset for the average person's lift if thiefOfJoy is true
+      ...(thiefOfJoy
+        ? [
+            {
+              label: "Average Person's Lift (kg)",
+              data: prData.map(() => averageLift), // Flat line at the average lift value
+              borderColor: "rgb(255, 99, 132)",
+              backgroundColor: "rgba(255, 99, 132, 0.2)",
+              borderDash: [5, 5], // Dashed line for the average lift
+            },
+          ]
+        : []),
     ],
   };
 

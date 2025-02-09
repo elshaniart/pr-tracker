@@ -4,12 +4,26 @@ import React, { useEffect, useState } from "react";
 import supabase from "../../helper/supabaseClient";
 import LineChart from "../LineChart";
 
+type Profile = {
+  id: string;
+  height_cm: number | null;
+  weight_kg: number | null;
+  birthday: string | null;
+  bench_press_pr: number | null;
+  squat_pr: number | null;
+  deadlift_pr: number | null;
+  onboarded: boolean;
+  name: string | null;
+  thiefOfJoy: boolean; // Add thiefOfJoy to the Profile type
+};
+
 interface DashboardHomeScreenProps {
   bench_press_pr: number | null;
   deadlift_pr: number | null;
   squat_pr: number | null;
   height_cm: number | null;
   weight_kg: number | null;
+  profile: Profile;
 }
 
 const DashboardHomeScreen = ({
@@ -18,6 +32,7 @@ const DashboardHomeScreen = ({
   squat_pr = 0,
   height_cm = 0,
   weight_kg = 0,
+  profile,
 }: DashboardHomeScreenProps) => {
   const [initialPRs, setInitialPRs] = useState<{ [key: string]: number }>({});
   const [selectedExercise, setSelectedExercise] = useState("bench"); // State for selected exercise
@@ -209,7 +224,11 @@ const DashboardHomeScreen = ({
             <option value="deadlift">Deadlift</option>
           </select>
         </div>
-        <LineChart prData={prData} />
+        <LineChart
+          prData={prData}
+          thiefOfJoy={profile?.thiefOfJoy || false}
+          exerciseType={selectedExercise}
+        />
       </div>
     </div>
   );
