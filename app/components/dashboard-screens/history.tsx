@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import supabase from "../../helper/supabaseClient";
+import { Trash2 } from "lucide-react";
 
 interface PR {
   id: string;
@@ -14,6 +15,11 @@ const DashboardHistoryScreen = () => {
   const [prs, setPRs] = useState<PR[]>([]); // State to store PRs
   const [filteredPRs, setFilteredPRs] = useState<PR[]>([]); // State for filtered PRs
   const [selectedExercise, setSelectedExercise] = useState<string>("all"); // State for selected exercise filter
+  const [earliestPRs, setEarliestPRs] = useState<{ [key: string]: PR | null }>({
+    bench: null,
+    squat: null,
+    deadlift: null,
+  });
 
   // Fetch PRs for the currently logged-in user
   useEffect(() => {
@@ -38,6 +44,15 @@ const DashboardHistoryScreen = () => {
       } else {
         setPRs(data);
         setFilteredPRs(data); // Initialize filtered PRs with all PRs
+
+        // Set the earliest PRs for each exercise (the first one in the list)
+        const earliest: { [key: string]: PR | null } = {
+          bench: data.filter((pr) => pr.exercise === "bench").pop() || null,
+          squat: data.filter((pr) => pr.exercise === "squat").pop() || null,
+          deadlift:
+            data.filter((pr) => pr.exercise === "deadlift").pop() || null,
+        };
+        setEarliestPRs(earliest);
       }
     };
 
@@ -53,6 +68,24 @@ const DashboardHistoryScreen = () => {
       setFilteredPRs(filtered); // Show PRs for the selected exercise
     }
   }, [selectedExercise, prs]);
+
+  // Delete PR
+  const handleDelete = async (prId: string, exercise: string) => {
+    if (earliestPRs[exercise]?.id === prId) {
+      alert(`You cannot delete the earliest ${exercise} PR.`);
+      return;
+    }
+
+    const { error } = await supabase.from("prs").delete().eq("id", prId);
+
+    if (error) {
+      console.error("Error deleting PR:", error);
+    } else {
+      // Remove deleted PR from state
+      setPRs(prs.filter((pr) => pr.id !== prId));
+      setFilteredPRs(filteredPRs.filter((pr) => pr.id !== prId));
+    }
+  };
 
   return (
     <div className="w-full h-full text-white py-8 flex flex-col gap-8">
@@ -83,6 +116,7 @@ const DashboardHistoryScreen = () => {
               <th className="p-4">Exercise</th>
               <th className="p-4">Weight (kg)</th>
               <th className="p-4">Date</th>
+              <th className="p-4">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -95,6 +129,17 @@ const DashboardHistoryScreen = () => {
                 <td className="p-4">{pr.value_kg}</td>
                 <td className="p-4">
                   {new Date(pr.date).toLocaleDateString()}
+                </td>
+                <td className="p-4">
+                  {/* Show the delete button unless it's the earliest PR for this exercise */}
+                  {earliestPRs[pr.exercise]?.id !== pr.id && (
+                    <button
+                      onClick={() => handleDelete(pr.id, pr.exercise)}
+                      className="flex items-center"
+                    >
+                      <Trash2 color="#E31A1A" size={24} />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
