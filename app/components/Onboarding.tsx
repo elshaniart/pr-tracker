@@ -29,17 +29,26 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         throw new Error("User not authenticated");
       }
 
+      // Apply validation limits
+      const validHeight = heightCm !== null ? Math.min(heightCm, 240) : null;
+      const validWeight = weightKg !== null ? Math.min(weightKg, 500) : null;
+      const validBenchPress =
+        benchPressPr !== null ? Math.min(benchPressPr, 450) : null;
+      const validSquat = squatPr !== null ? Math.min(squatPr, 505) : null;
+      const validDeadlift =
+        deadliftPr !== null ? Math.min(deadliftPr, 501) : null;
+
       // Update the profile with onboarding data
       const { error: profileError } = await supabase
         .from("profiles")
         .update({
           name,
-          height_cm: heightCm,
-          weight_kg: weightKg,
+          height_cm: validHeight,
+          weight_kg: validWeight,
           birthday,
-          bench_press_pr: benchPressPr,
-          squat_pr: squatPr,
-          deadlift_pr: deadliftPr,
+          bench_press_pr: validBenchPress,
+          squat_pr: validSquat,
+          deadlift_pr: validDeadlift,
           onboarded: true, // Set onboarded to true
         })
         .eq("id", userData.user.id);
@@ -54,19 +63,19 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       const { error: prError } = await supabase.from("prs").insert([
         {
           exercise: "bench",
-          value_kg: benchPressPr,
+          value_kg: validBenchPress,
           date: today,
           user_id: userData.user.id,
         },
         {
           exercise: "squat",
-          value_kg: squatPr,
+          value_kg: validSquat,
           date: today,
           user_id: userData.user.id,
         },
         {
           exercise: "deadlift",
-          value_kg: deadliftPr,
+          value_kg: validDeadlift,
           date: today,
           user_id: userData.user.id,
         },
@@ -106,7 +115,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             type="number"
             placeholder="Height (cm)"
             value={heightCm ?? ""}
-            onChange={(e) => setHeightCm(Number(e.target.value))}
+            onChange={(e) => setHeightCm(Math.min(Number(e.target.value), 240))}
             className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
             required
           />
@@ -115,7 +124,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             type="number"
             placeholder="Weight (kg)"
             value={weightKg ?? ""}
-            onChange={(e) => setWeightKg(Number(e.target.value))}
+            onChange={(e) => setWeightKg(Math.min(Number(e.target.value), 500))}
             className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
             required
           />
@@ -133,7 +142,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             type="number"
             placeholder="Bench Press PR (kg)"
             value={benchPressPr ?? ""}
-            onChange={(e) => setBenchPressPr(Number(e.target.value))}
+            onChange={(e) =>
+              setBenchPressPr(Math.min(Number(e.target.value), 450))
+            }
             className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
             required
           />
@@ -142,7 +153,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             type="number"
             placeholder="Squat PR (kg)"
             value={squatPr ?? ""}
-            onChange={(e) => setSquatPr(Number(e.target.value))}
+            onChange={(e) => setSquatPr(Math.min(Number(e.target.value), 505))}
             className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
             required
           />
@@ -151,7 +162,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             type="number"
             placeholder="Deadlift PR (kg)"
             value={deadliftPr ?? ""}
-            onChange={(e) => setDeadliftPr(Number(e.target.value))}
+            onChange={(e) =>
+              setDeadliftPr(Math.min(Number(e.target.value), 501))
+            }
             className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
             required
           />

@@ -99,7 +99,7 @@ const DashboardProfileScreen = ({
           <input
             type="number"
             value={heightCm ?? ""}
-            onChange={(e) => setHeightCm(Number(e.target.value))}
+            onChange={(e) => setHeightCm(Math.min(Number(e.target.value), 240))}
             className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
             disabled={!isEditing}
           />
@@ -111,7 +111,7 @@ const DashboardProfileScreen = ({
           <input
             type="number"
             value={weightKg ?? ""}
-            onChange={(e) => setWeightKg(Number(e.target.value))}
+            onChange={(e) => setWeightKg(Math.min(Number(e.target.value), 500))}
             className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
             disabled={!isEditing}
           />

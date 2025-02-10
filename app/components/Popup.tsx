@@ -104,7 +104,13 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
             <input
               type="number"
               value={valueKg || ""}
-              onChange={(e) => setValueKg(parseFloat(e.target.value))}
+              onChange={(e) => {
+                const inputValue = Number(e.target.value);
+                if (exercise === "bench") setValueKg(Math.min(inputValue, 450));
+                if (exercise === "squat") setValueKg(Math.min(inputValue, 505));
+                if (exercise === "deadlift")
+                  setValueKg(Math.min(inputValue, 501));
+              }}
               className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
               required
             />

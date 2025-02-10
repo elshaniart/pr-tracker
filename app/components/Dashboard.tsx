@@ -49,6 +49,7 @@ export default function Dashboard() {
   // Function to handle onboarding completion
   const handleOnboardingComplete = () => {
     setIsOnboardingComplete(true);
+    window.location.reload();
   };
 
   // Function to toggle thiefOfJoy
