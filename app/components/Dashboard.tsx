@@ -146,10 +146,10 @@ export default function Dashboard() {
       />
       {currentScreen === "home" ? (
         <DashboardHomeScreen
-          bench_press_pr={profile?.bench_press_pr}
-          deadlift_pr={profile?.deadlift_pr}
+          bench_press_pr={profile?.bench_press_pr || 0}
+          deadlift_pr={profile?.deadlift_pr || 0}
           height_cm={profile?.height_cm}
-          squat_pr={profile?.squat_pr}
+          squat_pr={profile?.squat_pr || 0}
           weight_kg={profile?.weight_kg}
           profile={profile}
         />

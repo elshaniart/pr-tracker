@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { averageLifts } from "../constants/averageLifts";
 
 ChartJS.register(
   CategoryScale,
@@ -34,15 +35,6 @@ interface LineChartProps {
 }
 
 const LineChart = ({ prData, thiefOfJoy, exerciseType }: LineChartProps) => {
-  // Define average lifts for each exercise type
-  const averageLifts: { [key: string]: number } = {
-    bench: 70, // Example for bench press
-    squat: 100, // Example for squat
-    deadlift: 120, // Example for deadlift
-  };
-
-  console.log(exerciseType);
-
   // Get the appropriate average lift for the selected exercise
   const averageLift = averageLifts[exerciseType] || 100; // Default to 100 if no match
 

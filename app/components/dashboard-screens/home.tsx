@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import supabase from "../../helper/supabaseClient";
 import LineChart from "../LineChart";
+import { averageLifts } from "@/app/constants/averageLifts";
 
 type Profile = {
   id: string;
@@ -18,9 +19,9 @@ type Profile = {
 };
 
 interface DashboardHomeScreenProps {
-  bench_press_pr: number | null;
-  deadlift_pr: number | null;
-  squat_pr: number | null;
+  bench_press_pr: number;
+  deadlift_pr: number;
+  squat_pr: number;
   height_cm: number | null;
   weight_kg: number | null;
   profile: Profile;
@@ -164,6 +165,7 @@ const DashboardHomeScreen = ({
               initialPR,
               current || 0
             );
+            const averageScore = averageLifts[key];
 
             return (
               <div
@@ -176,6 +178,24 @@ const DashboardHomeScreen = ({
                   {percentageIncrease !== null && (
                     <p className="text-[#01B574]">(+{percentageIncrease}%)</p>
                   )}
+                </div>
+                <div
+                  className={`${
+                    !profile?.thiefOfJoy ? "hidden" : "flex"
+                  } flex-row gap-2 items-center font-semibold text-sm`}
+                >
+                  <p>Average: </p>
+                  <p
+                    className={` ${
+                      current < averageScore
+                        ? "text-[#E31A1A]"
+                        : current == averageScore
+                        ? "text-[#F6AD55]"
+                        : "text-[#01B574]"
+                    }`}
+                  >
+                    {averageScore}
+                  </p>
                 </div>
               </div>
             );
