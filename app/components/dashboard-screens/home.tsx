@@ -15,7 +15,7 @@ type Profile = {
   deadlift_pr: number | null;
   onboarded: boolean;
   name: string | null;
-  thiefOfJoy: boolean; // Add thiefOfJoy to the Profile type
+  thiefofjoy: boolean; // Add thiefOfJoy to the Profile type
 };
 
 interface DashboardHomeScreenProps {
@@ -181,7 +181,7 @@ const DashboardHomeScreen = ({
                 </div>
                 <div
                   className={`${
-                    !profile?.thiefOfJoy ? "hidden" : "flex"
+                    !profile?.thiefofjoy ? "hidden" : "flex"
                   } flex-row gap-2 items-center font-semibold text-sm`}
                 >
                   <p>Average: </p>
@@ -246,7 +246,7 @@ const DashboardHomeScreen = ({
         </div>
         <LineChart
           prData={prData}
-          thiefOfJoy={profile?.thiefOfJoy || false}
+          thiefOfJoy={profile?.thiefofjoy || false}
           exerciseType={selectedExercise}
         />
       </div>

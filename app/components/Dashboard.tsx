@@ -21,7 +21,7 @@ type Profile = {
   deadlift_pr: number | null;
   onboarded: boolean;
   name: string | null;
-  thiefOfJoy: boolean; // Add thiefOfJoy to the Profile type
+  thiefofjoy: boolean; // Add thiefOfJoy to the Profile type
 };
 
 type Screen = "home" | "profile" | "history" | "exercises";
@@ -66,7 +66,7 @@ export default function Dashboard() {
       }
 
       // Update the local profile state
-      setProfile({ ...profile, thiefOfJoy: newValue });
+      setProfile({ ...profile, thiefofjoy: newValue });
     } catch (error) {
       console.error("Error updating thiefOfJoy:", error);
     }
@@ -93,6 +93,7 @@ export default function Dashboard() {
       }
 
       if (!profileData) {
+        console.log("Creating new profile...");
         const { data: newProfile, error: createError } = await supabase
           .from("profiles")
           .upsert([
@@ -105,7 +106,7 @@ export default function Dashboard() {
               squat_pr: null,
               deadlift_pr: null,
               onboarded: false,
-              thiefOfJoy: false, // Default value for new profiles
+              thiefofjoy: false, // Ensure consistency here
             },
           ])
           .select()
@@ -118,6 +119,7 @@ export default function Dashboard() {
 
         setProfile(newProfile);
       } else {
+        console.log("Profile fetched:", profileData);
         setProfile(profileData);
       }
     };
@@ -141,7 +143,7 @@ export default function Dashboard() {
         currentScreen={currentScreen}
         handleScreenChange={handleScreenChange}
         togglePopup={togglePopup}
-        thiefOfJoy={profile.thiefOfJoy}
+        thiefOfJoy={profile.thiefofjoy}
         onThiefOfJoyToggle={handleThiefOfJoyToggle}
       />
       {currentScreen === "home" ? (

@@ -13,7 +13,7 @@ interface Profile {
   deadlift_pr: number | null;
   onboarded: boolean;
   name: string | null;
-  thiefOfJoy: boolean;
+  thiefofjoy: boolean;
 }
 
 interface DashboardProfileScreenProps {
