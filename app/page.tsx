@@ -20,9 +20,6 @@ export default function Home() {
     const fetchUser = async () => {
       const { data, error } = await supabase.auth.getSession();
 
-      console.log("Session data:", data);
-      console.log("Session error:", error);
-
       if (error) {
         console.error("Error fetching session:", error);
       }
