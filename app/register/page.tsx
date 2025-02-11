@@ -75,7 +75,7 @@ export default function RegisterPage() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 mb-4 border rounded"
+            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px] mb-4"
             required
           />
           <input
@@ -83,13 +83,13 @@ export default function RegisterPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 mb-4 border rounded"
+            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px] mb-4"
             required
           />
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 mb-4"
+            className="w-full bg-[#0075FF] text-white p-2 rounded mb-4"
           >
             Register
           </button>

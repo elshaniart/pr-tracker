@@ -3,6 +3,10 @@
 import React, { useState } from "react";
 import supabase from "../helper/supabaseClient";
 
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
+
 interface OnboardingProps {
   onComplete: () => void; // Callback function to notify parent
 }
@@ -95,10 +99,12 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen min-w-full">
+    <div
+      className={`flex flex-col items-center justify-center min-h-screen min-w-full ${montserrat.className}`}
+    >
       <div className="bg-[#060B26] p-4 text-white rounded-xl">
         <h1 className="text-2xl font-bold mb-4 text-center">Onboarding</h1>
-        <form onSubmit={handleSubmit} className="w-96">
+        <form onSubmit={handleSubmit} className="w-80 md:w-96">
           <label>Full Name</label>
           <input
             type="text"

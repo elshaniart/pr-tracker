@@ -46,14 +46,14 @@ export default function LoginPage() {
       className={`flex flex-col items-center justify-center min-h-screen bg-[#15162e] ${montserrat.className}`}
     >
       <div className="text-center bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-8 text-white">
-        <h1 className="text-2xl font-bold mb-4">Log In</h1>
+        <h1 className="text-2xl font-bold mb-4">Sign In</h1>
         <form onSubmit={handleLogin} className="w-64">
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 mb-4 border rounded"
+            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px] mb-4"
             required
           />
           <input
@@ -61,13 +61,13 @@ export default function LoginPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 mb-4 border rounded"
+            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px] mb-4"
             required
           />
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-4"
+            className="w-full bg-[#0075FF] text-white p-2 rounded mb-4"
           >
             Sign In
           </button>
