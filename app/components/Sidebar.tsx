@@ -62,7 +62,7 @@ const Sidebar = ({
       <div
         className={`${
           isMobileMenuOpen ? "flex" : "hidden"
-        } md:flex flex-col gap-8 w-full h-screen md:h-full max-w-[304px] m-auto rounded-2xl bg-gradient-to-r from-[#060B26] to-[#06275D] border-2 border-[#060B26] px-4 py-8 text-white md:relative absolute top-[88px] md:top-0 left-0 right-0 z-50`}
+        } md:flex flex-col gap-8 w-full h-screen md:h-full max-w-[304px] m-auto rounded-2xl bg-gradient-to-r from-[#060B26] to-[#06275D] border-2 border-[#060B26] px-4 py-8 text-white md:relative absolute top-[88px] md:top-0 left-0 right-0 z-[9999]`}
       >
         <button
           onClick={togglePopup}
