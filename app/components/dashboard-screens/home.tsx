@@ -152,9 +152,9 @@ const DashboardHomeScreen = ({
 
   return (
     <div className="w-full h-full text-white py-8 flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 pt-16 md:pt-0 px-4 md:px-0">
         <h2 className="text-2xl font-semibold">Current PRs</h2>
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden">
           {[
             { name: "Bench Press", current: bench_press_pr, key: "bench" },
             { name: "Deadlift", current: deadlift_pr, key: "deadlift" },
@@ -170,7 +170,7 @@ const DashboardHomeScreen = ({
             return (
               <div
                 key={key}
-                className="h-[112px] w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col"
+                className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col"
               >
                 <p className="text-sm leading-3 text-[#ccc]">{name}</p>
                 <div className="flex flex-row gap-2 items-center font-semibold text-sm">
@@ -203,20 +203,20 @@ const DashboardHomeScreen = ({
         </div>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 px-4 md:px-0">
         <h2 className="text-2xl font-semibold">Personal Info</h2>
-        <div className="flex flex-row gap-2">
-          <div className="h-[112px] w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
+        <div className="flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden">
+          <div className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
             <p className="text-sm leading-3 text-[#ccc]">Weight</p>
             <p className="text-xl font-semibold">{weight_kg} kg</p>
           </div>
-          <div className="h-[112px] w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
+          <div className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
             <p className="text-sm leading-3 text-[#ccc]">Height</p>
             <p className="text-xl font-semibold">
               {height_cm ? (height_cm / 100).toFixed(2) + "m" : "N/A"}
             </p>
           </div>
-          <div className="h-[112px] w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
+          <div className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
             <p className="text-sm leading-3 text-[#ccc]">BMI</p>
             <p className="text-xl font-semibold">
               {weight_kg && height_cm
@@ -229,7 +229,7 @@ const DashboardHomeScreen = ({
       </div>
 
       {/* Exercise Selector and Line Chart */}
-      <div className="flex flex-col gap-2">
+      <div className="hidden md:flex flex-col gap-2 px-4 md:px-0">
         <div className="flex gap-2 items-center">
           <label className="text-sm text-gray-300 font-semibold">
             Select Exercise:

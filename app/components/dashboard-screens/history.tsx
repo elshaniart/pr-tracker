@@ -88,8 +88,8 @@ const DashboardHistoryScreen = () => {
   };
 
   return (
-    <div className="w-full h-full text-white py-8 flex flex-col gap-8">
-      <h2 className="text-2xl font-semibold">PR History</h2>
+    <div className="w-full h-full text-white py-8 px-4 md:px-0 flex flex-col gap-8">
+      <h2 className="text-2xl font-semibold mt-16 md:mt-0">PR History</h2>
 
       {/* Filter by Exercise */}
       <div className="flex gap-4">
@@ -110,13 +110,13 @@ const DashboardHistoryScreen = () => {
 
       {/* PR Table */}
       <div className="overflow-x-auto">
-        <table className="w-[88%] text-left border-collapse">
+        <table className="w-[100%] md:w-[88%] text-left border-collapse">
           <thead>
             <tr className="bg-[#1A1F37]">
-              <th className="p-4">Exercise</th>
-              <th className="p-4">Weight (kg)</th>
-              <th className="p-4">Date</th>
-              <th className="p-4">Actions</th>
+              <th className="p-4 text-sm md:text-base">Exercise</th>
+              <th className="p-4 text-sm md:text-base">Weight (kg)</th>
+              <th className="p-4 text-sm md:text-base">Date</th>
+              <th className="p-4 text-sm md:text-base">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -125,9 +125,11 @@ const DashboardHistoryScreen = () => {
                 key={pr.id}
                 className="border-b border-[#1A1F37] bg-[#212641]"
               >
-                <td className="p-4 capitalize">{pr.exercise}</td>
-                <td className="p-4">{pr.value_kg}</td>
-                <td className="p-4">
+                <td className="p-4 capitalize text-sm md:text-base">
+                  {pr.exercise}
+                </td>
+                <td className="p-4 text-sm md:text-base">{pr.value_kg}</td>
+                <td className="p-4 text-sm md:text-base">
                   {new Date(pr.date).toLocaleDateString()}
                 </td>
                 <td className="p-4">

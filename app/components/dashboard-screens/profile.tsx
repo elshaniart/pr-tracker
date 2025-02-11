@@ -74,8 +74,8 @@ const DashboardProfileScreen = ({
   };
 
   return (
-    <div className="w-full h-full text-white py-8 flex flex-col gap-8">
-      <h2 className="text-2xl font-semibold">Profile</h2>
+    <div className="w-full h-full text-white py-8 flex flex-col gap-8 px-4 md:px-0">
+      <h2 className="text-2xl font-semibold mt-16 md:mt-0">Profile</h2>
 
       {error && <p className="text-red-500">{error}</p>}
 
