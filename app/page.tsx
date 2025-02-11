@@ -18,25 +18,31 @@ export default function Home() {
   // Check if the user is signed in
   useEffect(() => {
     const fetchUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
+      const { data, error } = await supabase.auth.getSession();
+
+      console.log("Session data:", data);
+      console.log("Session error:", error);
+
+      if (error) {
+        console.error("Error fetching session:", error);
+      }
+
+      if (data?.session) {
+        setUser(data.session.user);
+      }
     };
 
     fetchUser();
 
-    // Listen for auth state changes (e.g., user signs in or out)
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log("Auth state changed:", event, session);
+        setUser(session?.user ?? null);
+      }
+    );
 
-    // Cleanup subscription on unmount
-    return () => subscription.unsubscribe();
+    return () => listener.subscription.unsubscribe();
   }, []);
-
   // Redirect to login page
   const handleLogin = () => {
     router.push("/log-in");
