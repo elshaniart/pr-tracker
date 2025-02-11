@@ -152,7 +152,7 @@ const DashboardHomeScreen = ({
 
   return (
     <div className="w-full h-full text-white py-8 flex flex-col gap-8">
-      <div className="flex flex-col gap-2 pt-16 md:pt-0 px-4 md:px-0">
+      <div className="flex flex-col gap-2 pt-16 md:pt-0 px-4 md:px-0 z-0">
         <h2 className="text-2xl font-semibold">Current PRs</h2>
         <div className="flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden">
           {[
@@ -203,7 +203,7 @@ const DashboardHomeScreen = ({
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 px-4 md:px-0">
+      <div className="flex flex-col gap-2 px-4 md:px-0 z-0">
         <h2 className="text-2xl font-semibold">Personal Info</h2>
         <div className="flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden">
           <div className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
