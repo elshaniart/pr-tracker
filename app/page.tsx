@@ -87,7 +87,7 @@ export default function Home() {
               onClick={handleRegister}
               className="text-white hover:underline"
             >
-              Don't have an account? Register
+              Don&apos;t have an account? Register
             </button>
           </div>
         </div>
