@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import supabase from "../helper/supabaseClient";
 
 interface OnboardingProps {
@@ -17,7 +16,6 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [squatPr, setSquatPr] = useState<number | null>(null);
   const [deadliftPr, setDeadliftPr] = useState<number | null>(null);
   const [error, setError] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
