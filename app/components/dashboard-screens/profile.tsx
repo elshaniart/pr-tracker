@@ -82,7 +82,7 @@ const DashboardProfileScreen = ({
       {error && <p className="text-red-500">{error}</p>}
 
       <div className="flex flex-col gap-4 max-w-xl">
-        <div className={`${isMobileMenuOpen && "hidden"}`}>
+        <div className={`${isMobileMenuOpen && "hidden"} w-full`}>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Name
           </label>
@@ -94,7 +94,7 @@ const DashboardProfileScreen = ({
             disabled={!isEditing}
           />
         </div>
-        <div className={`${isMobileMenuOpen && "hidden"}`}>
+        <div className={`${isMobileMenuOpen && "hidden"} w-full`}>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Height (cm)
           </label>
@@ -106,7 +106,7 @@ const DashboardProfileScreen = ({
             disabled={!isEditing}
           />
         </div>
-        <div className={`${isMobileMenuOpen && "hidden"}`}>
+        <div className={`${isMobileMenuOpen && "hidden"} w-full`}>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Weight (kg)
           </label>
@@ -118,7 +118,7 @@ const DashboardProfileScreen = ({
             disabled={!isEditing}
           />
         </div>
-        <div className={`${isMobileMenuOpen && "hidden"}`}>
+        <div className={`${isMobileMenuOpen && "hidden"} w-full`}>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Birthday
           </label>
