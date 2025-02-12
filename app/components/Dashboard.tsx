@@ -97,7 +97,6 @@ export default function Dashboard() {
       }
 
       if (!profileData) {
-        console.log("Creating new profile...");
         const { data: newProfile, error: createError } = await supabase
           .from("profiles")
           .upsert([
@@ -123,7 +122,6 @@ export default function Dashboard() {
 
         setProfile(newProfile);
       } else {
-        console.log("Profile fetched:", profileData);
         setProfile(profileData);
       }
     };
@@ -160,6 +158,7 @@ export default function Dashboard() {
           squat_pr={profile?.squat_pr || 0}
           weight_kg={profile?.weight_kg}
           profile={profile}
+          isMobileMenuOpen={isMobileMenuOpen}
         />
       ) : currentScreen === "profile" ? (
         <DashboardProfileScreen

@@ -25,6 +25,7 @@ interface DashboardHomeScreenProps {
   height_cm: number | null;
   weight_kg: number | null;
   profile: Profile;
+  isMobileMenuOpen: boolean;
 }
 
 const DashboardHomeScreen = ({
@@ -34,6 +35,7 @@ const DashboardHomeScreen = ({
   height_cm = 0,
   weight_kg = 0,
   profile,
+  isMobileMenuOpen,
 }: DashboardHomeScreenProps) => {
   const [initialPRs, setInitialPRs] = useState<{ [key: string]: number }>({});
   const [selectedExercise, setSelectedExercise] = useState("bench"); // State for selected exercise
@@ -154,7 +156,11 @@ const DashboardHomeScreen = ({
     <div className="w-full h-full text-white py-8 flex flex-col gap-8">
       <div className="flex flex-col gap-2 pt-16 md:pt-0 px-4 md:px-0">
         <h2 className="text-2xl font-semibold">Current PRs</h2>
-        <div className="flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden">
+        <div
+          className={`${
+            isMobileMenuOpen && "hidden"
+          } flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden`}
+        >
           {[
             { name: "Bench Press", current: bench_press_pr, key: "bench" },
             { name: "Deadlift", current: deadlift_pr, key: "deadlift" },
@@ -205,7 +211,11 @@ const DashboardHomeScreen = ({
 
       <div className="flex flex-col gap-2 px-4 md:px-0">
         <h2 className="text-2xl font-semibold">Personal Info</h2>
-        <div className="flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden">
+        <div
+          className={`${
+            isMobileMenuOpen && "hidden"
+          } flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden`}
+        >
           <div className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
             <p className="text-sm leading-3 text-[#ccc]">Weight</p>
             <p className="text-xl font-semibold">{weight_kg} kg</p>

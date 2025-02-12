@@ -43,8 +43,6 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
         throw prError;
       }
 
-      console.log("PR created successfully:", prData);
-
       // Step 2: Update the user's profile with the new PR value
       const { error: profileError } = await supabase
         .from("profiles")
@@ -58,8 +56,6 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
       if (profileError) {
         throw profileError;
       }
-
-      console.log("Profile updated successfully");
 
       onClose(); // Close the popup
       window.location.reload(); // Refresh the page to reflect the new PR
