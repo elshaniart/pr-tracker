@@ -27,7 +27,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
 
     try {
       // Step 1: Insert the new PR into the `prs` table
-      const { data: prData, error: prError } = await supabase
+      const { error: prError } = await supabase
         .from("prs")
         .insert([
           {
