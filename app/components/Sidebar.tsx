@@ -111,7 +111,7 @@ const Sidebar = ({
           </div>
           <p>Thief of Joy</p>
         </button>
-        <div className="w-full flex flex-col gap-2 mt-0 md:mt-64">
+        <div className="w-full flex flex-col gap-2 mt-0 md:mt-48">
           {/* Sign Out Button */}
           <p className="text-center mt-4">
             Signed in as: <b>{name}</b>
