@@ -159,7 +159,7 @@ const DashboardHomeScreen = ({
         <div
           className={`${
             isMobileMenuOpen && "hidden"
-          } flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden`}
+          } flex flex-row gap-2 overflow-x-scroll xl:overflow-x-hidden`}
         >
           {[
             { name: "Bench Press", current: bench_press_pr, key: "bench" },
@@ -214,7 +214,7 @@ const DashboardHomeScreen = ({
         <div
           className={`${
             isMobileMenuOpen && "hidden"
-          } flex flex-row gap-2 overflow-x-scroll md:overflow-x-hidden`}
+          } flex flex-row gap-2 overflow-x-scroll xl:overflow-x-hidden`}
         >
           <div className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
             <p className="text-sm leading-3 text-[#ccc]">Weight</p>
