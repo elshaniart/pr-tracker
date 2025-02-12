@@ -52,7 +52,7 @@ const Sidebar = ({
   };
 
   return (
-    <div className="fixed inset-0 md:relative p-4 min-w-[336px] h-[88px] md:h-full">
+    <div className="fixed inset-0 md:relative p-4 min-w-[280px] md:min-w-[336px] h-[88px] md:h-full">
       {/* Mobile Hamburger Icon */}
       <div className="md:hidden flex justify-between items-center p-4 bg-[#060B26] text-white">
         <h1 className="text-2xl font-semibold">PR Tracker</h1>
