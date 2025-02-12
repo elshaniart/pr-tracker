@@ -31,6 +31,7 @@ export default function Dashboard() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("home");
   const [showPopup, setShowPopup] = useState(false);
   const [isOnboardingComplete, setIsOnboardingComplete] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
 
   const handleScreenChange = (screen: Screen) => {
@@ -72,6 +73,8 @@ export default function Dashboard() {
       console.error("Error updating thiefOfJoy:", error);
     }
   };
+
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -146,6 +149,8 @@ export default function Dashboard() {
         togglePopup={togglePopup}
         thiefOfJoy={profile.thiefofjoy}
         onThiefOfJoyToggle={handleThiefOfJoyToggle}
+        isMobileMenuOpen={isMobileMenuOpen}
+        toggleMobileMenu={toggleMobileMenu}
       />
       {currentScreen === "home" ? (
         <DashboardHomeScreen

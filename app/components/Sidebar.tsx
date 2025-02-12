@@ -22,6 +22,8 @@ interface SidebarProps {
   togglePopup: () => void;
   thiefOfJoy: boolean;
   onThiefOfJoyToggle: (newValue: boolean) => void;
+  isMobileMenuOpen: boolean;
+  toggleMobileMenu: () => void;
 }
 
 const Sidebar = ({
@@ -32,9 +34,10 @@ const Sidebar = ({
   togglePopup,
   thiefOfJoy,
   onThiefOfJoyToggle,
+  isMobileMenuOpen,
+  toggleMobileMenu,
 }: SidebarProps) => {
   const [isSwitchDisabled, setIsSwitchDisabled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleThiefOfJoyToggle = async () => {
     if (isSwitchDisabled) return;
@@ -49,11 +52,11 @@ const Sidebar = ({
   };
 
   return (
-    <div className="sticky inset-0 md:relative p-4 min-w-[336px] h-[88px] md:h-full">
+    <div className="fixed inset-0 md:relative p-4 min-w-[336px] h-[88px] md:h-full">
       {/* Mobile Hamburger Icon */}
       <div className="md:hidden flex justify-between items-center p-4 bg-[#060B26] text-white">
         <h1 className="text-2xl font-semibold">PR Tracker</h1>
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        <button onClick={toggleMobileMenu}>
           {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
