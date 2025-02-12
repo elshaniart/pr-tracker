@@ -164,6 +164,7 @@ export default function Dashboard() {
         <DashboardProfileScreen
           profile={profile}
           setProfile={handleProfileUpdate}
+          isMobileMenuOpen={isMobileMenuOpen}
         />
       ) : (
         <DashboardHistoryScreen />

@@ -19,11 +19,13 @@ interface Profile {
 interface DashboardProfileScreenProps {
   profile: Profile;
   setProfile: (profile: Profile) => void;
+  isMobileMenuOpen: boolean;
 }
 
 const DashboardProfileScreen = ({
   profile,
   setProfile,
+  isMobileMenuOpen,
 }: DashboardProfileScreenProps) => {
   const [name, setName] = useState(profile.name || "");
   const [heightCm, setHeightCm] = useState<number | null>(profile.height_cm);
@@ -80,7 +82,7 @@ const DashboardProfileScreen = ({
       {error && <p className="text-red-500">{error}</p>}
 
       <div className="flex flex-col gap-4 max-w-xl">
-        <div>
+        <div className={`${isMobileMenuOpen && "hidden"}`}>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Name
           </label>
@@ -92,7 +94,7 @@ const DashboardProfileScreen = ({
             disabled={!isEditing}
           />
         </div>
-        <div>
+        <div className={`${isMobileMenuOpen && "hidden"}`}>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Height (cm)
           </label>
@@ -104,7 +106,7 @@ const DashboardProfileScreen = ({
             disabled={!isEditing}
           />
         </div>
-        <div>
+        <div className={`${isMobileMenuOpen && "hidden"}`}>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Weight (kg)
           </label>
@@ -116,7 +118,7 @@ const DashboardProfileScreen = ({
             disabled={!isEditing}
           />
         </div>
-        <div>
+        <div className={`${isMobileMenuOpen && "hidden"}`}>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Birthday
           </label>
