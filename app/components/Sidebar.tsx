@@ -81,7 +81,10 @@ const Sidebar = ({
         {["home", "history", "profile"].map((screen) => (
           <button
             key={screen}
-            onClick={() => handleScreenChange(screen as Screen)}
+            onClick={() => {
+              handleScreenChange(screen as Screen);
+              toggleMobileMenu();
+            }}
             className={`flex flex-row gap-4 px-2 rounded-2xl hover:bg-[#1A1F37] transition-all ease-in-out py-2 items-center text-lg group ${
               currentScreen === screen ? "bg-[#1A1F37]" : ""
             }`}
