@@ -11,6 +11,8 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        brandGreen: "#d2f65a",
+        mutedGreen: "#2a3013",
       },
     },
   },

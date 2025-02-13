@@ -67,7 +67,7 @@ const LineChart = ({ prData, thiefOfJoy, exerciseType }: LineChartProps) => {
     plugins: {
       legend: {
         labels: {
-          color: "#fff",
+          color: "#000",
           font: {
             size: 14,
           },
@@ -81,7 +81,7 @@ const LineChart = ({ prData, thiefOfJoy, exerciseType }: LineChartProps) => {
     scales: {
       x: {
         ticks: {
-          color: "#fff",
+          color: "#000",
           font: {
             size: 14,
           },
@@ -89,7 +89,7 @@ const LineChart = ({ prData, thiefOfJoy, exerciseType }: LineChartProps) => {
       },
       y: {
         ticks: {
-          color: "#fff",
+          color: "#000",
           font: {
             size: 14,
           },

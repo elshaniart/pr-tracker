@@ -71,7 +71,7 @@ const DashboardHomeScreen = ({
   const bmi = calculateBMI(weight_kg, height_cm);
   const { category, color } = bmi
     ? getBMIClassification(bmi)
-    : { category: "N/A", color: "text-white" };
+    : { category: "N/A", color: "text-black" };
 
   useEffect(() => {
     const fetchInitialPRs = async () => {
@@ -153,7 +153,7 @@ const DashboardHomeScreen = ({
   };
 
   return (
-    <div className="w-full h-full text-white py-8 flex flex-col gap-8">
+    <div className="w-full h-full text-black py-8 flex flex-col gap-8 pl-8">
       <div className="flex flex-col gap-2 pt-16 md:pt-0 px-4 md:px-0">
         <h2 className="text-2xl font-semibold">Current PRs</h2>
         <div
@@ -176,9 +176,9 @@ const DashboardHomeScreen = ({
             return (
               <div
                 key={key}
-                className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col"
+                className="h-[112px] min-w-[200px] text-black md:w-[288px] bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-3.5 transition-all ease-in-out p-4 gap-1 flex flex-col"
               >
-                <p className="text-sm leading-3 text-[#ccc]">{name}</p>
+                <p className="text-sm leading-3">{name}</p>
                 <div className="flex flex-row gap-2 items-center font-semibold text-sm">
                   <p className="text-xl font-semibold">{current} kg</p>
                   {percentageIncrease !== null && (
@@ -216,18 +216,18 @@ const DashboardHomeScreen = ({
             isMobileMenuOpen && "hidden"
           } flex flex-row gap-2 overflow-x-scroll xl:overflow-x-hidden`}
         >
-          <div className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
-            <p className="text-sm leading-3 text-[#ccc]">Weight</p>
+          <div className="h-[112px] min-w-[200px] md:w-[288px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-3.5 transition-all ease-in-out p-4 gap-1 flex flex-col">
+            <p className="text-sm leading-3">Weight</p>
             <p className="text-xl font-semibold">{weight_kg} kg</p>
           </div>
-          <div className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
-            <p className="text-sm leading-3 text-[#ccc]">Height</p>
+          <div className="h-[112px] min-w-[200px] md:w-[288px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-3.5 transition-all ease-in-out p-4 gap-1 flex flex-col">
+            <p className="text-sm leading-3">Height</p>
             <p className="text-xl font-semibold">
               {height_cm ? (height_cm / 100).toFixed(2) + "m" : "N/A"}
             </p>
           </div>
-          <div className="h-[112px] min-w-[200px] md:w-[288px] bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-4 gap-1 flex flex-col">
-            <p className="text-sm leading-3 text-[#ccc]">BMI</p>
+          <div className="h-[112px] min-w-[200px] md:w-[288px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-3.5 transition-all ease-in-out p-4 gap-1 flex flex-col">
+            <p className="text-sm leading-3">BMI</p>
             <p className="text-xl font-semibold">
               {weight_kg && height_cm
                 ? (weight_kg / (height_cm / 100) ** 2).toFixed(1)
@@ -239,26 +239,26 @@ const DashboardHomeScreen = ({
       </div>
 
       {/* Exercise Selector and Line Chart */}
-      <div className="hidden md:flex flex-col gap-2 px-4 md:px-0">
+      <div className="hidden md:flex text-black flex-col gap-2 px-4 md:px-0">
         <div className="flex gap-2 items-center">
-          <label className="text-sm text-gray-300 font-semibold">
-            Select Exercise:
-          </label>
+          <label className="text-2xl   font-semibold">Select Exercise:</label>
           <select
             value={selectedExercise}
             onChange={(e) => setSelectedExercise(e.target.value)}
-            className="p-2 rounded-lg bg-[#1A1F37] text-white h-[48px] flex items-center"
+            className="p-2 bg-white text-black border-2 hover:border-4 hover:border-brandGreen transition-all ease-in-out hover:p-1.5 border-black h-[48px] flex items-center"
           >
             <option value="bench">Bench Press</option>
             <option value="squat">Squat</option>
             <option value="deadlift">Deadlift</option>
           </select>
         </div>
-        <LineChart
-          prData={prData}
-          thiefOfJoy={profile?.thiefofjoy || false}
-          exerciseType={selectedExercise}
-        />
+        <div className="w-full pb-12 pt-8">
+          <LineChart
+            prData={prData}
+            thiefOfJoy={profile?.thiefofjoy || false}
+            exerciseType={selectedExercise}
+          />
+        </div>
       </div>
     </div>
   );

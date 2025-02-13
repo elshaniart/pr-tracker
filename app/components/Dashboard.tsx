@@ -24,6 +24,19 @@ type Profile = {
   thiefofjoy: boolean; // Add thiefOfJoy to the Profile type
 };
 
+const staticProfile: Profile = {
+  id: "1231231awd",
+  height_cm: 186,
+  weight_kg: 81,
+  birthday: "22-05-2001",
+  bench_press_pr: 100,
+  squat_pr: 130,
+  deadlift_pr: 150,
+  onboarded: true,
+  name: "Art Elshani",
+  thiefofjoy: true,
+};
+
 type Screen = "home" | "profile" | "history" | "exercises";
 
 export default function Dashboard() {
@@ -76,76 +89,76 @@ export default function Dashboard() {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-      if (!userData?.user || userError) {
-        router.push("/log-in");
-        return;
-      }
+  // useEffect(() => {
+  //   const fetchProfile = async () => {
+  //     const { data: userData, error: userError } =
+  //       await supabase.auth.getUser();
+  //     if (!userData?.user || userError) {
+  //       router.push("/log-in");
+  //       return;
+  //     }
 
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userData.user.id)
-        .maybeSingle();
+  //     const { data: profileData, error: profileError } = await supabase
+  //       .from("profiles")
+  //       .select("*")
+  //       .eq("id", userData.user.id)
+  //       .maybeSingle();
 
-      if (profileError) {
-        console.error("Error fetching profile:", profileError);
-        return;
-      }
+  //     if (profileError) {
+  //       console.error("Error fetching profile:", profileError);
+  //       return;
+  //     }
 
-      if (!profileData) {
-        const { data: newProfile, error: createError } = await supabase
-          .from("profiles")
-          .upsert([
-            {
-              id: userData.user.id,
-              height_cm: null,
-              weight_kg: null,
-              birthday: null,
-              bench_press_pr: null,
-              squat_pr: null,
-              deadlift_pr: null,
-              onboarded: false,
-              thiefofjoy: false, // Ensure consistency here
-            },
-          ])
-          .select()
-          .single();
+  //     if (!profileData) {
+  //       const { data: newProfile, error: createError } = await supabase
+  //         .from("profiles")
+  //         .upsert([
+  //           {
+  //             id: userData.user.id,
+  //             height_cm: null,
+  //             weight_kg: null,
+  //             birthday: null,
+  //             bench_press_pr: null,
+  //             squat_pr: null,
+  //             deadlift_pr: null,
+  //             onboarded: false,
+  //             thiefofjoy: false, // Ensure consistency here
+  //           },
+  //         ])
+  //         .select()
+  //         .single();
 
-        if (createError) {
-          console.error("Error creating profile:", createError);
-          return;
-        }
+  //       if (createError) {
+  //         console.error("Error creating profile:", createError);
+  //         return;
+  //       }
 
-        setProfile(newProfile);
-      } else {
-        setProfile(profileData);
-      }
-    };
+  //       setProfile(newProfile);
+  //     } else {
+  //       setProfile(profileData);
+  //     }
+  //   };
 
-    fetchProfile();
-  }, [router]);
+  //   fetchProfile();
+  // }, [router]);
 
-  if (!profile) {
-    return <p>Loading...</p>;
-  }
+  // if (!profile) {
+  //   return <p>Loading...</p>;
+  // }
 
-  if (!profile.onboarded && !isOnboardingComplete) {
-    return <Onboarding onComplete={handleOnboardingComplete} />;
-  }
+  // if (!profile.onboarded && !isOnboardingComplete) {
+  //   return <Onboarding onComplete={handleOnboardingComplete} />;
+  // }
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center min-h- w-screen h-screen overflow-x-hidden">
+    <div className="flex flex-col md:flex-row md:items-center min-h- w-screen h-screen overflow-x-hidden pl-[336px]">
       <Sidebar
         signOut={signOut}
-        name={profile?.name}
+        name={"Art Elshani"}
         currentScreen={currentScreen}
         handleScreenChange={handleScreenChange}
         togglePopup={togglePopup}
-        thiefOfJoy={profile.thiefofjoy}
+        thiefOfJoy={true}
         onThiefOfJoyToggle={handleThiefOfJoyToggle}
         isMobileMenuOpen={isMobileMenuOpen}
         toggleMobileMenu={toggleMobileMenu}
@@ -154,22 +167,22 @@ export default function Dashboard() {
         <DashboardHomeScreen
           bench_press_pr={profile?.bench_press_pr || 0}
           deadlift_pr={profile?.deadlift_pr || 0}
-          height_cm={profile?.height_cm}
+          height_cm={186}
           squat_pr={profile?.squat_pr || 0}
-          weight_kg={profile?.weight_kg}
-          profile={profile}
+          weight_kg={81}
+          profile={staticProfile}
           isMobileMenuOpen={isMobileMenuOpen}
         />
       ) : currentScreen === "profile" ? (
         <DashboardProfileScreen
-          profile={profile}
+          profile={staticProfile}
           setProfile={handleProfileUpdate}
           isMobileMenuOpen={isMobileMenuOpen}
         />
       ) : (
         <DashboardHistoryScreen />
       )}
-      {showPopup && <Popup onClose={togglePopup} userId={profile.id} />}
+      {showPopup && <Popup onClose={togglePopup} userId={staticProfile.id} />}
     </div>
   );
 }
