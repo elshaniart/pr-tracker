@@ -34,6 +34,8 @@ const DashboardProfileScreen = ({
   const [error, setError] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
+  console.log(isMobileMenuOpen);
+
   const handleSave = async () => {
     try {
       const { data: userData } = await supabase.auth.getUser();
