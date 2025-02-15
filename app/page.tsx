@@ -61,7 +61,7 @@ export default function Home() {
 
   return (
     <div
-      className={`flex flex-col items-center justify-center min-h-screen bg-[#15162e] ${montserrat.className}`}
+      className={`flex flex-col items-center justify-center min-h-screen ${montserrat.className}`}
     >
       {user ? (
         // If the user is signed in, show the Dashboard
