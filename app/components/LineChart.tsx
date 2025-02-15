@@ -56,7 +56,7 @@ const LineChart = ({ prData, thiefOfJoy, exerciseType }: LineChartProps) => {
         const prValues = profiles
           .map((profile) => {
             switch (exerciseType) {
-              case "bench_press":
+              case "bench":
                 return profile.bench_press_pr;
               case "squat":
                 return profile.squat_pr;
