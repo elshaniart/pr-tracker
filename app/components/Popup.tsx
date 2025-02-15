@@ -4,18 +4,56 @@ import React, { useState } from "react";
 import supabase from "../helper/supabaseClient";
 
 interface PopupProps {
-  onClose: () => void; // Function to close the popup
-  userId: string; // ID of the user creating the PR
+  onClose: () => void;
+  userId: string;
 }
 
 const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
   const [exercise, setExercise] = useState<"bench" | "deadlift" | "squat">(
     "bench"
-  ); // Selected exercise
-  const [valueKg, setValueKg] = useState<number | null>(null); // Weight in kg
+  );
+  const [valueKg, setValueKg] = useState<number | null>(null);
   const [date, setDate] = useState<string>(
     new Date().toISOString().split("T")[0]
-  ); // Default to today's date
+  );
+
+  const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = Number(e.target.value);
+    let maxValue = 0;
+
+    switch (exercise) {
+      case "bench":
+        maxValue = 450;
+        break;
+      case "squat":
+        maxValue = 505;
+        break;
+      case "deadlift":
+        maxValue = 501;
+        break;
+      default:
+        maxValue = Infinity;
+    }
+
+    if (inputValue > maxValue) {
+      alert(`The maximum value for ${exercise} is ${maxValue} kg.`);
+      setValueKg(maxValue);
+    } else {
+      setValueKg(inputValue);
+    }
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = e.target.value;
+    const today = new Date().toISOString().split("T")[0];
+
+    if (selectedDate > today) {
+      alert("You cannot select a future date.");
+      setDate(today);
+    } else {
+      setDate(selectedDate);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,42 +64,37 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
     }
 
     try {
-      // Step 1: Insert the new PR into the `prs` table
+      // Insert PR
       const { error: prError } = await supabase
         .from("prs")
-        .insert([
-          {
-            exercise,
-            value_kg: valueKg,
-            date,
-            user_id: userId,
-          },
-        ])
-        .select();
+        .insert([{ exercise, value_kg: valueKg, date, user_id: userId }]);
 
-      if (prError) {
-        throw prError;
-      }
+      if (prError) throw new Error(`PR insertion failed: ${prError.message}`);
 
-      // Step 2: Update the user's profile with the new PR value
+      // Update profile
+      const updateData: Record<string, number | null> = {};
+      if (exercise === "bench") updateData.bench_press_pr = valueKg;
+      if (exercise === "squat") updateData.squat_pr = valueKg;
+      if (exercise === "deadlift") updateData.deadlift_pr = valueKg;
+
       const { error: profileError } = await supabase
         .from("profiles")
-        .update({
-          bench_press_pr: exercise === "bench" ? valueKg : undefined,
-          squat_pr: exercise === "squat" ? valueKg : undefined,
-          deadlift_pr: exercise === "deadlift" ? valueKg : undefined,
-        })
+        .update(updateData)
         .eq("id", userId);
 
-      if (profileError) {
-        throw profileError;
-      }
+      if (profileError)
+        throw new Error(`Profile update failed: ${profileError.message}`);
 
       onClose(); // Close the popup
       window.location.reload(); // Refresh the page to reflect the new PR
     } catch (error) {
-      console.error("Error:", error);
-      alert("Failed to create PR or update profile. Please try again.");
+      if (error instanceof Error) {
+        console.error("Error:", error.message);
+        alert(`Failed to create PR or update profile: ${error.message}`);
+      } else {
+        console.error("Unknown error:", error);
+        alert("Failed to create PR or update profile. Please try again.");
+      }
     }
   };
 
@@ -100,13 +133,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
             <input
               type="number"
               value={valueKg || ""}
-              onChange={(e) => {
-                const inputValue = Number(e.target.value);
-                if (exercise === "bench") setValueKg(Math.min(inputValue, 450));
-                if (exercise === "squat") setValueKg(Math.min(inputValue, 505));
-                if (exercise === "deadlift")
-                  setValueKg(Math.min(inputValue, 501));
-              }}
+              onChange={handleWeightChange}
               className="w-full p-2 border-2 border-black text-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all focus:outline-none h-[48px]"
               required
             />
@@ -118,7 +145,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
             <input
               type="date"
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={handleDateChange}
               className="w-full p-2 border-2 border-black text-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all focus:outline-none h-[48px]"
               required
             />
