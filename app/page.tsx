@@ -68,26 +68,26 @@ export default function Home() {
         <Dashboard />
       ) : (
         // If the user is not signed in, show the sign-in and register buttons
-        <div className="text-center bg-gradient-to-r from-[#060B26] to-[#06275D] border-[2px] border-[#060B26] rounded-2xl p-8 text-white">
+        <div className="text-center bg-white p-8 border-2 border-black text-black">
           <h1 className="text-2xl font-bold mb-4">Welcome to PR Tracker</h1>
           <div className="flex flex-col items-center gap-4">
             <div className="flex flex-row gap-4">
               <button
                 onClick={handleLogin}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                className="px-4 py-2 bg-black hover:bg-brandGreen ease-in-out transition-all text-white hover:text-black h-[48px]"
               >
                 Sign In
               </button>
               <button
                 onClick={handleGoogleSignIn}
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                className="px-4 py-2 text-black border-black border-2 hover:border-brandGreen hover:border-4 hover:px-3.5 ease-in-out transition-all h-[48px]"
               >
                 Sign In with Google
               </button>
             </div>
             <button
               onClick={handleRegister}
-              className="text-white hover:underline"
+              className="text-black hover:underline"
             >
               Don&apos;t have an account? Register
             </button>
