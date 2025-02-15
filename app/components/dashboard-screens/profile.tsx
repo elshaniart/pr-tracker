@@ -90,7 +90,7 @@ const DashboardProfileScreen = ({
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 text-black border-2 border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
             disabled={!isEditing}
           />
         </div>
@@ -100,7 +100,7 @@ const DashboardProfileScreen = ({
             type="number"
             value={heightCm ?? ""}
             onChange={(e) => setHeightCm(Math.min(Number(e.target.value), 240))}
-            className="w-full p-2 text-black border-2 border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
             disabled={!isEditing}
           />
         </div>
@@ -110,7 +110,7 @@ const DashboardProfileScreen = ({
             type="number"
             value={weightKg ?? ""}
             onChange={(e) => setWeightKg(Math.min(Number(e.target.value), 500))}
-            className="w-full p-2 text-black border-2 border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
             disabled={!isEditing}
           />
         </div>
@@ -120,7 +120,7 @@ const DashboardProfileScreen = ({
             type="date"
             value={birthday}
             onChange={(e) => setBirthday(e.target.value)}
-            className="w-full p-2 text-black border-2 border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
             disabled={!isEditing}
           />
         </div>
