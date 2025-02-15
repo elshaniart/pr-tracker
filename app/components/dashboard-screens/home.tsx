@@ -245,7 +245,7 @@ const DashboardHomeScreen = ({
           <select
             value={selectedExercise}
             onChange={(e) => setSelectedExercise(e.target.value)}
-            className="p-2 bg-white text-black border-2 hover:border-4 hover:border-brandGreen transition-all ease-in-out hover:p-1.5 border-black h-[48px] flex items-center"
+            className="p-2 bg-white focus:outline-none text-black border-2 hover:border-4 hover:border-brandGreen transition-all ease-in-out hover:p-1.5 border-black h-[48px] flex items-center"
           >
             <option value="bench">Bench Press</option>
             <option value="squat">Squat</option>
