@@ -24,18 +24,18 @@ type Profile = {
   thiefofjoy: boolean; // Add thiefOfJoy to the Profile type
 };
 
-const staticProfile: Profile = {
-  id: "1231231awd",
-  height_cm: 186,
-  weight_kg: 81,
-  birthday: "22-05-2001",
-  bench_press_pr: 100,
-  squat_pr: 130,
-  deadlift_pr: 150,
-  onboarded: true,
-  name: "Art Elshani",
-  thiefofjoy: true,
-};
+// const staticProfile: Profile = {
+//   id: "1231231awd",
+//   height_cm: 186,
+//   weight_kg: 81,
+//   birthday: "22-05-2001",
+//   bench_press_pr: 100,
+//   squat_pr: 130,
+//   deadlift_pr: 150,
+//   onboarded: true,
+//   name: "Art Elshani",
+//   thiefofjoy: true,
+// };
 
 type Screen = "home" | "profile" | "history" | "exercises";
 
