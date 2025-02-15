@@ -11,7 +11,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { averageLifts } from "../constants/averageLifts";
+import { useEffect, useState } from "react";
+import supabase from "../helper/supabaseClient";
 
 ChartJS.register(
   CategoryScale,
@@ -35,8 +36,48 @@ interface LineChartProps {
 }
 
 const LineChart = ({ prData, thiefOfJoy, exerciseType }: LineChartProps) => {
-  // Get the appropriate average lift for the selected exercise
-  const averageLift = averageLifts[exerciseType] || 100; // Default to 100 if no match
+  const [averageLift, setAverageLift] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchAverageLift = async () => {
+      try {
+        // Fetch all profiles from Supabase
+        const { data: profiles, error } = await supabase
+          .from("profiles")
+          .select(`bench_press_pr, squat_pr, deadlift_pr`);
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        // Extract the relevant PR data based on the exercise type
+        const prValues = profiles
+          .map((profile) => {
+            switch (exerciseType) {
+              case "bench_press":
+                return profile.bench_press_pr;
+              case "squat":
+                return profile.squat_pr;
+              case "deadlift":
+                return profile.deadlift_pr;
+              default:
+                return null;
+            }
+          })
+          .filter((value): value is number => value !== null);
+
+        // Calculate the average lift value
+        const average =
+          prValues.reduce((sum, value) => sum + value, 0) / prValues.length;
+        setAverageLift(average);
+      } catch (error) {
+        console.error("Error fetching average lift:", error);
+        setAverageLift(null);
+      }
+    };
+
+    fetchAverageLift();
+  }, [exerciseType]);
 
   const lineChartData = {
     labels: prData.map((pr) => pr.date), // Use dates as labels
@@ -48,10 +89,10 @@ const LineChart = ({ prData, thiefOfJoy, exerciseType }: LineChartProps) => {
         backgroundColor: "rgba(75, 192, 192, 0.2)",
       },
       // Add a second dataset for the average person's lift if thiefOfJoy is true
-      ...(thiefOfJoy
+      ...(thiefOfJoy && averageLift !== null
         ? [
             {
-              label: "Average Person's Lift (kg)",
+              label: "Average PR (kg)",
               data: prData.map(() => averageLift), // Flat line at the average lift value
               borderColor: "rgb(255, 99, 132)",
               backgroundColor: "rgba(255, 99, 132, 0.2)",
