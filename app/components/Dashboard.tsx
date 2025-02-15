@@ -182,7 +182,7 @@ export default function Dashboard() {
       ) : (
         <DashboardHistoryScreen />
       )}
-      {showPopup && <Popup onClose={togglePopup} userId={staticProfile.id} />}
+      {showPopup && <Popup onClose={togglePopup} userId={profile?.id} />}
     </div>
   );
 }
