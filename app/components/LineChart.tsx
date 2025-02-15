@@ -50,8 +50,6 @@ const LineChart = ({ prData, thiefOfJoy, exerciseType }: LineChartProps) => {
           throw new Error(error.message);
         }
 
-        console.log({ profiles });
-
         // Extract the relevant PR data based on the exercise type
         const prValues = profiles
           .map((profile) => {
