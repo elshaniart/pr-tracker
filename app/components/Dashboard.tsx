@@ -89,76 +89,76 @@ export default function Dashboard() {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  // useEffect(() => {
-  //   const fetchProfile = async () => {
-  //     const { data: userData, error: userError } =
-  //       await supabase.auth.getUser();
-  //     if (!userData?.user || userError) {
-  //       router.push("/log-in");
-  //       return;
-  //     }
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
+      if (!userData?.user || userError) {
+        router.push("/log-in");
+        return;
+      }
 
-  //     const { data: profileData, error: profileError } = await supabase
-  //       .from("profiles")
-  //       .select("*")
-  //       .eq("id", userData.user.id)
-  //       .maybeSingle();
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userData.user.id)
+        .maybeSingle();
 
-  //     if (profileError) {
-  //       console.error("Error fetching profile:", profileError);
-  //       return;
-  //     }
+      if (profileError) {
+        console.error("Error fetching profile:", profileError);
+        return;
+      }
 
-  //     if (!profileData) {
-  //       const { data: newProfile, error: createError } = await supabase
-  //         .from("profiles")
-  //         .upsert([
-  //           {
-  //             id: userData.user.id,
-  //             height_cm: null,
-  //             weight_kg: null,
-  //             birthday: null,
-  //             bench_press_pr: null,
-  //             squat_pr: null,
-  //             deadlift_pr: null,
-  //             onboarded: false,
-  //             thiefofjoy: false, // Ensure consistency here
-  //           },
-  //         ])
-  //         .select()
-  //         .single();
+      if (!profileData) {
+        const { data: newProfile, error: createError } = await supabase
+          .from("profiles")
+          .upsert([
+            {
+              id: userData.user.id,
+              height_cm: null,
+              weight_kg: null,
+              birthday: null,
+              bench_press_pr: null,
+              squat_pr: null,
+              deadlift_pr: null,
+              onboarded: false,
+              thiefofjoy: false, // Ensure consistency here
+            },
+          ])
+          .select()
+          .single();
 
-  //       if (createError) {
-  //         console.error("Error creating profile:", createError);
-  //         return;
-  //       }
+        if (createError) {
+          console.error("Error creating profile:", createError);
+          return;
+        }
 
-  //       setProfile(newProfile);
-  //     } else {
-  //       setProfile(profileData);
-  //     }
-  //   };
+        setProfile(newProfile);
+      } else {
+        setProfile(profileData);
+      }
+    };
 
-  //   fetchProfile();
-  // }, [router]);
+    fetchProfile();
+  }, [router]);
 
-  // if (!profile) {
-  //   return <p>Loading...</p>;
-  // }
+  if (!profile) {
+    return <p>Loading...</p>;
+  }
 
-  // if (!profile.onboarded && !isOnboardingComplete) {
-  //   return <Onboarding onComplete={handleOnboardingComplete} />;
-  // }
+  if (!profile.onboarded && !isOnboardingComplete) {
+    return <Onboarding onComplete={handleOnboardingComplete} />;
+  }
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center min-h- w-screen h-screen overflow-x-hidden pl-[336px]">
+    <div className="flex flex-col md:flex-row md:items-center max-w-screen h-screen overflow-x-hidden lg:pl-[336px]">
       <Sidebar
         signOut={signOut}
-        name={"Art Elshani"}
+        name={profile?.name}
         currentScreen={currentScreen}
         handleScreenChange={handleScreenChange}
         togglePopup={togglePopup}
-        thiefOfJoy={true}
+        thiefOfJoy={profile?.thiefofjoy}
         onThiefOfJoyToggle={handleThiefOfJoyToggle}
         isMobileMenuOpen={isMobileMenuOpen}
         toggleMobileMenu={toggleMobileMenu}
@@ -167,15 +167,15 @@ export default function Dashboard() {
         <DashboardHomeScreen
           bench_press_pr={profile?.bench_press_pr || 0}
           deadlift_pr={profile?.deadlift_pr || 0}
-          height_cm={186}
+          height_cm={profile?.height_cm}
           squat_pr={profile?.squat_pr || 0}
-          weight_kg={81}
-          profile={staticProfile}
+          weight_kg={profile?.weight_kg}
+          profile={profile}
           isMobileMenuOpen={isMobileMenuOpen}
         />
       ) : currentScreen === "profile" ? (
         <DashboardProfileScreen
-          profile={staticProfile}
+          profile={profile}
           setProfile={handleProfileUpdate}
           isMobileMenuOpen={isMobileMenuOpen}
         />

@@ -66,14 +66,14 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-[#060B26] p-8 rounded-2xl w-[400px]">
-        <h2 className="text-2xl font-semibold mb-4 text-white">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
+      <div className="bg-white p-8 border-2 border-black w-[400px]">
+        <h2 className="text-2xl font-semibold mb-4 text-black">
           Register New PR
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Exercise
             </label>
             <div className="flex gap-4">
@@ -88,13 +88,13 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
                     }
                     className="mr-2"
                   />
-                  <span className="text-white capitalize">{ex}</span>
+                  <span className="text-black capitalize">{ex}</span>
                 </label>
               ))}
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Weight (kg)
             </label>
             <input
@@ -107,19 +107,19 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
                 if (exercise === "deadlift")
                   setValueKg(Math.min(inputValue, 501));
               }}
-              className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
+              className="w-full p-2 border-2 border-black text-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all focus:outline-none h-[48px]"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Date
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
+              className="w-full p-2 border-2 border-black text-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all focus:outline-none h-[48px]"
               required
             />
           </div>
@@ -127,13 +127,13 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg h-[48px]"
+              className="px-4 py-2 text-black border-black border-2 hover:border-brandGreen hover:border-4 hover:px-3.5 ease-in-out transition-all h-[48px]"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#0075FF] text-white rounded-lg h-[48px]"
+              className="px-4 py-2 bg-black hover:bg-brandGreen ease-in-out transition-all text-white hover:text-black h-[48px]"
             >
               Save
             </button>

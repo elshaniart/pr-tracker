@@ -76,57 +76,49 @@ const DashboardProfileScreen = ({
   };
 
   return (
-    <div className="w-full h-full text-white py-8 flex flex-col gap-8 px-4 md:px-0">
-      <h2 className="text-2xl font-semibold mt-16 md:mt-0">Profile</h2>
+    <div className="w-full h-full text-black py-8 flex flex-col gap-8 px-4 md:pr-0 lg:pl-8">
+      <h2 className="text-3xl font-semibold mt-16 md:mt-0">Profile</h2>
 
       {error && <p className="text-red-500">{error}</p>}
 
       <div className="flex flex-col gap-4 max-w-xl">
-        <div className={`${isMobileMenuOpen && "hidden"} w-full`}>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Name
-          </label>
+        <div className={`${false && "hidden"} w-full`}>
+          <label className="block font-medium mb-2">Name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
+            className="w-full p-2 text-black border-2 border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
             disabled={!isEditing}
           />
         </div>
-        <div className={`${isMobileMenuOpen && "hidden"} w-full`}>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Height (cm)
-          </label>
+        <div className={`${false && "hidden"} w-full`}>
+          <label className="block font-medium mb-2">Height (cm)</label>
           <input
             type="number"
             value={heightCm ?? ""}
             onChange={(e) => setHeightCm(Math.min(Number(e.target.value), 240))}
-            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
+            className="w-full p-2 text-black border-2 border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
             disabled={!isEditing}
           />
         </div>
-        <div className={`${isMobileMenuOpen && "hidden"} w-full`}>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Weight (kg)
-          </label>
+        <div className={`${false && "hidden"} w-full`}>
+          <label className="block font-medium mb-2">Weight (kg)</label>
           <input
             type="number"
             value={weightKg ?? ""}
             onChange={(e) => setWeightKg(Math.min(Number(e.target.value), 500))}
-            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
+            className="w-full p-2 text-black border-2 border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
             disabled={!isEditing}
           />
         </div>
-        <div className={`${isMobileMenuOpen && "hidden"} w-full`}>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Birthday
-          </label>
+        <div className={`${false && "hidden"} w-full`}>
+          <label className="block font-medium mb-2">Birthday</label>
           <input
             type="date"
             value={birthday}
             onChange={(e) => setBirthday(e.target.value)}
-            className="w-full p-2 rounded-lg bg-[#1A1F37] text-white h-[48px]"
+            className="w-full p-2 text-black border-2 border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px]"
             disabled={!isEditing}
           />
         </div>
@@ -137,13 +129,13 @@ const DashboardProfileScreen = ({
           <>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-[#0075FF] text-white rounded-lg h-[48px]"
+              className="px-4 py-2 bg-black hover:bg-brandGreen ease-in-out transition-all text-white hover:text-black h-[48px]"
             >
               Save
             </button>
             <button
               onClick={() => setIsEditing(false)}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg h-[48px]"
+              className="px-4 py-2 text-black border-black border-2 hover:border-brandGreen hover:border-4 hover:px-3.5 ease-in-out transition-all h-[48px]"
             >
               Cancel
             </button>
@@ -151,7 +143,7 @@ const DashboardProfileScreen = ({
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="px-4 py-2 bg-[#0075FF] text-white rounded-lg h-[48px]"
+            className="px-4 h-[48px] text-black border-black border-2 hover:border-brandGreen hover:border-4 hover:px-3.5 ease-in-out transition-all font-medium"
           >
             Edit Profile
           </button>

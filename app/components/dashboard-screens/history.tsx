@@ -59,7 +59,7 @@ const DashboardHistoryScreen = () => {
     fetchPRs();
   }, []);
 
-  // Filter PRs based on selected exercise
+  // // Filter PRs based on selected exercise
   useEffect(() => {
     if (selectedExercise === "all") {
       setFilteredPRs(prs); // Show all PRs
@@ -88,18 +88,16 @@ const DashboardHistoryScreen = () => {
   };
 
   return (
-    <div className="w-full h-full text-white py-8 px-4 md:px-0 flex flex-col gap-8">
-      <h2 className="text-2xl font-semibold mt-16 md:mt-0">PR History</h2>
+    <div className="w-full h-full text-black py-8 md:pr-0 flex flex-col gap-8 lg:pl-8 max-w-screen px-4">
+      <h2 className="text-3xl font-semibold mt-16 md:mt-0">PR History</h2>
 
       {/* Filter by Exercise */}
-      <div className="flex gap-4">
-        <label className="text-sm font-medium text-gray-300">
-          Filter by Exercise:
-        </label>
+      <div className="flex gap-4 items-center">
+        <label className="text-xl font-semibold">Filter by Exercise:</label>
         <select
           value={selectedExercise}
           onChange={(e) => setSelectedExercise(e.target.value)}
-          className="p-2 rounded-lg bg-[#1A1F37] text-white"
+          className="p-2 bg-white text-black border-2 hover:border-4 hover:border-brandGreen transition-all ease-in-out hover:p-1.5 border-black h-[48px] flex items-center"
         >
           <option value="all">All</option>
           <option value="bench">Bench Press</option>
@@ -112,19 +110,16 @@ const DashboardHistoryScreen = () => {
       <div className="overflow-x-auto">
         <table className="w-[100%] md:w-[88%] text-left border-collapse">
           <thead>
-            <tr className="bg-[#1A1F37]">
-              <th className="p-4 text-sm md:text-base">Exercise</th>
-              <th className="p-4 text-sm md:text-base">Weight (kg)</th>
-              <th className="p-4 text-sm md:text-base">Date</th>
-              <th className="p-4 text-sm md:text-base">Actions</th>
+            <tr className="bg-brandGreen">
+              <th className="p-4 text-sm md:text-xl">Exercise</th>
+              <th className="p-4 text-sm md:text-xl">Weight (kg)</th>
+              <th className="p-4 text-sm md:text-xl">Date</th>
+              <th className="p-4 text-sm md:text-sm">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredPRs.map((pr) => (
-              <tr
-                key={pr.id}
-                className="border-b border-[#1A1F37] bg-[#212641]"
-              >
+              <tr key={pr.id} className="border-b border-black">
                 <td className="p-4 capitalize text-sm md:text-base">
                   {pr.exercise}
                 </td>
