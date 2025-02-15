@@ -153,7 +153,7 @@ const DashboardHomeScreen = ({
   };
 
   return (
-    <div className="w-full h-full max-w-screen text-black py-8 flex flex-col gap-8 px-4u">
+    <div className="w-full h-full max-w-screen text-black py-8 flex flex-col gap-8 px-4">
       <div className="flex flex-col gap-2 pt-16 md:pt-0 px-4 md:px-0 w-screen lg:w-auto">
         <h2 className="text-3xl font-semibold">Current PRs</h2>
         <div
