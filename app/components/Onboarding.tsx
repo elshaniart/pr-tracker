@@ -102,7 +102,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     <div
       className={`flex flex-col items-center justify-center min-h-screen min-w-full ${montserrat.className}`}
     >
-      <div className="p-4 text-black rounded border-2 border-black">
+      <div className="p-4 text-black border-2 border-black">
         <h1 className="text-2xl font-bold mb-4 text-center">Onboarding</h1>
         <form onSubmit={handleSubmit} className="w-80 md:w-96">
           <label>Full Name</label>
