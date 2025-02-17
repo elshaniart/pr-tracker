@@ -102,7 +102,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     <div
       className={`flex flex-col items-center justify-center min-h-screen min-w-full ${montserrat.className}`}
     >
-      <div className="bg-[#060B26] p-4 text-white rounded-xl">
+      <div className="p-4 text-black rounded border-2 border-black">
         <h1 className="text-2xl font-bold mb-4 text-center">Onboarding</h1>
         <form onSubmit={handleSubmit} className="w-80 md:w-96">
           <label>Full Name</label>
@@ -111,7 +111,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
             required
           />
           <label>Height in cm</label>
@@ -120,7 +120,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             placeholder="Height (cm)"
             value={heightCm ?? ""}
             onChange={(e) => setHeightCm(Math.min(Number(e.target.value), 240))}
-            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
             required
           />
           <label>Weight in kg</label>
@@ -129,7 +129,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             placeholder="Weight (kg)"
             value={weightKg ?? ""}
             onChange={(e) => setWeightKg(Math.min(Number(e.target.value), 500))}
-            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
             required
           />
           <label>Birthday</label>
@@ -138,7 +138,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             placeholder="Birthday"
             value={birthday}
             onChange={(e) => setBirthday(e.target.value)}
-            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
             required
           />
           <label>Bench Press PR</label>
@@ -149,7 +149,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             onChange={(e) =>
               setBenchPressPr(Math.min(Number(e.target.value), 450))
             }
-            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
             required
           />
           <label>Squat PR</label>
@@ -158,7 +158,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             placeholder="Squat PR (kg)"
             value={squatPr ?? ""}
             onChange={(e) => setSquatPr(Math.min(Number(e.target.value), 505))}
-            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
             required
           />
           <label>Deadlift PR</label>
@@ -169,13 +169,13 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             onChange={(e) =>
               setDeadliftPr(Math.min(Number(e.target.value), 501))
             }
-            className="w-full p-2 mb-4 border rounded bg-[#1A1F37] text-white"
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
             required
           />
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-black hover:bg-brandGreen ease-in-out transition-all text-white hover:text-black h-[48px] w-full"
           >
             Submit
           </button>
