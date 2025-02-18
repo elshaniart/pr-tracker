@@ -153,7 +153,7 @@ export default function Dashboard() {
       ) : currentScreen === "history" ? (
         <DashboardHistoryScreen />
       ) : currentScreen === "friends" ? (
-        <DashboardFriendsScreen />
+        <DashboardFriendsScreen profile={profile} />
       ) : null}
       {showPopup && <Popup onClose={togglePopup} userId={profile?.id} />}
     </div>

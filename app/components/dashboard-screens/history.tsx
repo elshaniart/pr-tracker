@@ -111,10 +111,10 @@ const DashboardHistoryScreen = () => {
         <table className="w-[100%] md:w-[88%] text-left border-collapse">
           <thead>
             <tr className="bg-brandGreen">
-              <th className="p-4 text-sm md:text-xl">Exercise</th>
-              <th className="p-4 text-sm md:text-xl">Weight (kg)</th>
-              <th className="p-4 text-sm md:text-xl">Date</th>
-              <th className="p-4 text-sm md:text-xl">Actions</th>
+              <th className="p-4 text-sm md:text-base">Exercise</th>
+              <th className="p-4 text-sm md:text-base">Weight (kg)</th>
+              <th className="p-4 text-sm md:text-base">Date</th>
+              <th className="p-4 text-sm md:text-base">Actions</th>
             </tr>
           </thead>
           <tbody>

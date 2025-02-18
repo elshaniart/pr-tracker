@@ -9,4 +9,6 @@ export type Profile = {
   onboarded: boolean;
   name: string | null;
   thiefofjoy: boolean; // Add thiefOfJoy to the Profile type
+  username: string | null;
+  friends: string[] | null;
 };

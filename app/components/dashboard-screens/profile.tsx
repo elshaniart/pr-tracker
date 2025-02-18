@@ -2,19 +2,7 @@
 
 import React, { useState } from "react";
 import supabase from "../../helper/supabaseClient";
-
-interface Profile {
-  id: string;
-  height_cm: number | null;
-  weight_kg: number | null;
-  birthday: string | null;
-  bench_press_pr: number | null;
-  squat_pr: number | null;
-  deadlift_pr: number | null;
-  onboarded: boolean;
-  name: string | null;
-  thiefofjoy: boolean;
-}
+import { Profile } from "@/app/types/profile";
 
 interface DashboardProfileScreenProps {
   profile: Profile;
@@ -28,14 +16,41 @@ const DashboardProfileScreen = ({
   isMobileMenuOpen,
 }: DashboardProfileScreenProps) => {
   const [name, setName] = useState(profile.name || "");
+  const [username, setUsername] = useState(profile.username || "");
   const [heightCm, setHeightCm] = useState<number | null>(profile.height_cm);
   const [weightKg, setWeightKg] = useState<number | null>(profile.weight_kg);
   const [birthday, setBirthday] = useState(profile.birthday || "");
   const [error, setError] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
+  // Function to check if the username is taken
+  const checkUsernameAvailability = async (username: string) => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("username", username);
+
+    if (error) {
+      setError("An error occurred while checking the username");
+      return false;
+    }
+
+    if (data && data.length > 0) {
+      setError(
+        "This username is already taken. Please choose a different one."
+      );
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSave = async () => {
     try {
+      // Check if the username is unique
+      const isUsernameUnique = await checkUsernameAvailability(username);
+      if (!isUsernameUnique) return;
+
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) {
         throw new Error("User not authenticated");
@@ -45,6 +60,7 @@ const DashboardProfileScreen = ({
         .from("profiles")
         .update({
           name,
+          username, // Include username in the update
           height_cm: heightCm,
           weight_kg: weightKg,
           birthday,
@@ -59,6 +75,7 @@ const DashboardProfileScreen = ({
       setProfile({
         ...profile,
         name,
+        username, // Update username in the profile
         height_cm: heightCm,
         weight_kg: weightKg,
         birthday,
@@ -76,13 +93,13 @@ const DashboardProfileScreen = ({
   };
 
   return (
-    <div className="w-full h-full text-black py-8 flex flex-col gap-8 px-4 md:pr-0">
+    <div className="w-full h-full text-black py-8 flex flex-col gap-4 px-4 md:pr-0">
       <h2 className="text-3xl font-semibold mt-16 md:mt-0">Profile</h2>
 
       {error && <p className="text-red-500">{error}</p>}
 
       <div className="flex flex-col gap-4 max-w-xl">
-        <div className={`${false && "hidden"} w-full`}>
+        <div className="w-full">
           <label className="block font-medium mb-2">Name</label>
           <input
             type="text"
@@ -94,7 +111,22 @@ const DashboardProfileScreen = ({
             disabled={!isEditing}
           />
         </div>
-        <div className={`${false && "hidden"} w-full`}>
+
+        {/* New input field for username */}
+        <div className="w-full">
+          <label className="block font-medium mb-2">Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className={`w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] ${
+              isMobileMenuOpen && "hidden"
+            }`}
+            disabled={!isEditing}
+          />
+        </div>
+
+        <div className="w-full">
           <label className="block font-medium mb-2">Height (cm)</label>
           <input
             type="number"
@@ -106,7 +138,7 @@ const DashboardProfileScreen = ({
             disabled={!isEditing}
           />
         </div>
-        <div className={`${false && "hidden"} w-full`}>
+        <div className="w-full">
           <label className="block font-medium mb-2">Weight (kg)</label>
           <input
             type="number"
@@ -118,7 +150,7 @@ const DashboardProfileScreen = ({
             disabled={!isEditing}
           />
         </div>
-        <div className={`${false && "hidden"} w-full`}>
+        <div className="w-full">
           <label className="block font-medium mb-2">Birthday</label>
           <input
             type="date"
