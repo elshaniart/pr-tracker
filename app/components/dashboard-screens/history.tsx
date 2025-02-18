@@ -114,7 +114,7 @@ const DashboardHistoryScreen = () => {
               <th className="p-4 text-sm md:text-xl">Exercise</th>
               <th className="p-4 text-sm md:text-xl">Weight (kg)</th>
               <th className="p-4 text-sm md:text-xl">Date</th>
-              <th className="p-4 text-sm md:text-sm">Actions</th>
+              <th className="p-4 text-sm md:text-xl">Actions</th>
             </tr>
           </thead>
           <tbody>

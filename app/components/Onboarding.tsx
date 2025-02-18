@@ -173,10 +173,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             required
           />
           {error && <p className="text-red-500 mb-4">{error}</p>}
-          <button
-            type="submit"
-            className="px-4 py-2 bg-black hover:bg-brandGreen ease-in-out transition-all text-white hover:text-black h-[48px] w-full"
-          >
+          <button type="submit" className="btn w-full">
             Submit
           </button>
         </form>

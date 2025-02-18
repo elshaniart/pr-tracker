@@ -135,24 +135,15 @@ const DashboardProfileScreen = ({
       <div className="flex gap-4">
         {isEditing ? (
           <>
-            <button
-              onClick={handleSave}
-              className="px-4 py-2 bg-black hover:bg-brandGreen ease-in-out transition-all text-white hover:text-black h-[48px]"
-            >
+            <button onClick={handleSave} className="btn">
               Save
             </button>
-            <button
-              onClick={() => setIsEditing(false)}
-              className="px-4 py-2 text-black border-black border-2 hover:border-brandGreen hover:border-4 hover:px-3.5 ease-in-out transition-all h-[48px]"
-            >
+            <button onClick={() => setIsEditing(false)} className="btn-alt">
               Cancel
             </button>
           </>
         ) : (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="px-4 h-[48px] text-black border-black border-2 hover:border-brandGreen hover:border-4 hover:px-3.5 ease-in-out transition-all font-medium"
-          >
+          <button onClick={() => setIsEditing(true)} className="btn">
             Edit Profile
           </button>
         )}

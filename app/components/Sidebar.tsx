@@ -4,15 +4,14 @@ import {
   Plus,
   History,
   UserPen,
+  Users,
   LogOut,
   ToggleLeft,
   ToggleRight,
   Menu,
   X,
 } from "lucide-react";
-
-// Define screen types
-type Screen = "home" | "profile" | "history" | "exercises";
+import { Screen } from "../types/screen";
 
 interface SidebarProps {
   signOut: () => void;
@@ -65,9 +64,9 @@ const Sidebar = ({
       <div
         className={`${
           isMobileMenuOpen ? "flex" : "hidden"
-        } md:flex flex-col justify-between gap-4 w-full h-[calc(100vh-88px)] md:h-full m-auto bg-black px-4 py-8 text-white md:relative absolute top-[88px] md:top-0 left-0 right-0 z-[9999]`}
+        } md:flex flex-col justify-between gap-4 w-full h-[calc(100vh-88px)] md:h-full m-auto bg-black p-4 text-white md:relative absolute top-[88px] md:top-0 left-0 right-0 z-[9999]`}
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <button
             onClick={togglePopup}
             className="flex flex-row gap-4 px-3 hover:bg-mutedGreen transition-all ease-in-out py-3 items-center text-lg"
@@ -80,7 +79,7 @@ const Sidebar = ({
 
           <div className="w-full h-0.5 bg-brandGreen"></div>
           {/* Navigation Buttons */}
-          {["home", "history", "profile"].map((screen) => (
+          {["home", "history", "profile", "friends"].map((screen) => (
             <button
               key={screen}
               onClick={() => {
@@ -100,19 +99,25 @@ const Sidebar = ({
               >
                 {screen === "home" && (
                   <Home
-                    color={`${currentScreen === screen ? "#d2f65a" : "black"}`}
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
                     size={20}
                   />
                 )}
                 {screen === "history" && (
                   <History
-                    color={`${currentScreen === screen ? "#d2f65a" : "black"}`}
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
                     size={20}
                   />
                 )}
                 {screen === "profile" && (
                   <UserPen
-                    color={`${currentScreen === screen ? "#d2f65a" : "black"}`}
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
+                    size={20}
+                  />
+                )}
+                {screen === "friends" && (
+                  <Users
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
                     size={20}
                   />
                 )}

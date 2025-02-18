@@ -72,16 +72,10 @@ export default function Home() {
           <h1 className="text-2xl font-bold mb-4">Welcome to PR Tracker</h1>
           <div className="flex flex-col items-center gap-4">
             <div className="flex flex-row gap-4">
-              <button
-                onClick={handleLogin}
-                className="px-4 py-2 bg-black hover:bg-brandGreen ease-in-out transition-all text-white hover:text-black h-[48px]"
-              >
+              <button onClick={handleLogin} className="btn">
                 Sign In
               </button>
-              <button
-                onClick={handleGoogleSignIn}
-                className="px-4 py-2 text-black border-black border-2 hover:border-brandGreen hover:border-4 hover:px-3.5 ease-in-out transition-all h-[48px]"
-              >
+              <button onClick={handleGoogleSignIn} className="btn-alt">
                 Sign In with Google
               </button>
             </div>

@@ -9,35 +9,10 @@ import Sidebar from "./Sidebar";
 import DashboardHomeScreen from "./dashboard-screens/home";
 import DashboardProfileScreen from "./dashboard-screens/profile";
 import DashboardHistoryScreen from "./dashboard-screens/history";
+import DashboardFriendsScreen from "./dashboard-screens/friends"; // Import Friends Screen
 import Popup from "./Popup";
-
-type Profile = {
-  id: string;
-  height_cm: number | null;
-  weight_kg: number | null;
-  birthday: string | null;
-  bench_press_pr: number | null;
-  squat_pr: number | null;
-  deadlift_pr: number | null;
-  onboarded: boolean;
-  name: string | null;
-  thiefofjoy: boolean; // Add thiefOfJoy to the Profile type
-};
-
-// const staticProfile: Profile = {
-//   id: "1231231awd",
-//   height_cm: 186,
-//   weight_kg: 81,
-//   birthday: "22-05-2001",
-//   bench_press_pr: 100,
-//   squat_pr: 130,
-//   deadlift_pr: 150,
-//   onboarded: true,
-//   name: "Art Elshani",
-//   thiefofjoy: true,
-// };
-
-type Screen = "home" | "profile" | "history" | "exercises";
+import { Screen } from "../types/screen";
+import { Profile } from "../types/profile";
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -55,18 +30,15 @@ export default function Dashboard() {
     setShowPopup(!showPopup);
   };
 
-  // Function to update the profile state
   const handleProfileUpdate = (updatedProfile: Profile) => {
     setProfile(updatedProfile);
   };
 
-  // Function to handle onboarding completion
   const handleOnboardingComplete = () => {
     setIsOnboardingComplete(true);
     window.location.reload();
   };
 
-  // Function to toggle thiefOfJoy
   const handleThiefOfJoyToggle = async (newValue: boolean) => {
     if (!profile) return;
 
@@ -80,7 +52,6 @@ export default function Dashboard() {
         throw new Error(error.message);
       }
 
-      // Update the local profile state
       setProfile({ ...profile, thiefofjoy: newValue });
     } catch (error) {
       console.error("Error updating thiefOfJoy:", error);
@@ -122,7 +93,7 @@ export default function Dashboard() {
               squat_pr: null,
               deadlift_pr: null,
               onboarded: false,
-              thiefofjoy: false, // Ensure consistency here
+              thiefofjoy: false,
             },
           ])
           .select()
@@ -179,9 +150,11 @@ export default function Dashboard() {
           setProfile={handleProfileUpdate}
           isMobileMenuOpen={isMobileMenuOpen}
         />
-      ) : (
+      ) : currentScreen === "history" ? (
         <DashboardHistoryScreen />
-      )}
+      ) : currentScreen === "friends" ? (
+        <DashboardFriendsScreen />
+      ) : null}
       {showPopup && <Popup onClose={togglePopup} userId={profile?.id} />}
     </div>
   );

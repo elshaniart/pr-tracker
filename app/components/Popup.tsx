@@ -151,17 +151,10 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
             />
           </div>
           <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-black border-black border-2 hover:border-brandGreen hover:border-4 hover:px-3.5 ease-in-out transition-all h-[48px]"
-            >
+            <button type="button" onClick={onClose} className="btn-alt">
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-black hover:bg-brandGreen ease-in-out transition-all text-white hover:text-black h-[48px]"
-            >
+            <button type="submit" className="btn">
               Save
             </button>
           </div>
