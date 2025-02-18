@@ -13,6 +13,7 @@ interface OnboardingProps {
 
 export default function Onboarding({ onComplete }: OnboardingProps) {
   const [name, setName] = useState("");
+  const [username, setUsername] = useState(""); // Added username state
   const [heightCm, setHeightCm] = useState<number | null>(null);
   const [weightKg, setWeightKg] = useState<number | null>(null);
   const [birthday, setBirthday] = useState("");
@@ -40,11 +41,12 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       const validDeadlift =
         deadliftPr !== null ? Math.min(deadliftPr, 501) : null;
 
-      // Update the profile with onboarding data
+      // Update the profile with onboarding data, including username
       const { error: profileError } = await supabase
         .from("profiles")
         .update({
           name,
+          username, // Save the username
           height_cm: validHeight,
           weight_kg: validWeight,
           birthday,
@@ -114,6 +116,15 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
             required
           />
+          <label>Username</label> {/* Added username input */}
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
+            required
+          />
           <label>Height in cm</label>
           <input
             type="number"
@@ -141,39 +152,50 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
             required
           />
-          <label>Bench Press PR</label>
-          <input
-            type="number"
-            placeholder="Bench Press PR (kg)"
-            value={benchPressPr ?? ""}
-            onChange={(e) =>
-              setBenchPressPr(Math.min(Number(e.target.value), 450))
-            }
-            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
-            required
-          />
-          <label>Squat PR</label>
-          <input
-            type="number"
-            placeholder="Squat PR (kg)"
-            value={squatPr ?? ""}
-            onChange={(e) => setSquatPr(Math.min(Number(e.target.value), 505))}
-            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
-            required
-          />
-          <label>Deadlift PR</label>
-          <input
-            type="number"
-            placeholder="Deadlift PR (kg)"
-            value={deadliftPr ?? ""}
-            onChange={(e) =>
-              setDeadliftPr(Math.min(Number(e.target.value), 501))
-            }
-            className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
-            required
-          />
+          <p className="text-xl font-semibold text-center">PRs</p>
+          <div className="flex gap-2">
+            <div>
+              <label>Bench</label>
+              <input
+                type="number"
+                placeholder="kg"
+                value={benchPressPr ?? ""}
+                onChange={(e) =>
+                  setBenchPressPr(Math.min(Number(e.target.value), 450))
+                }
+                className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
+                required
+              />
+            </div>
+            <div>
+              <label>Squat</label>
+              <input
+                type="number"
+                placeholder="kg"
+                value={squatPr ?? ""}
+                onChange={(e) =>
+                  setSquatPr(Math.min(Number(e.target.value), 505))
+                }
+                className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
+                required
+              />
+            </div>
+            <div>
+              <label>Deadlift</label>
+              <input
+                type="number"
+                placeholder="kg"
+                value={deadliftPr ?? ""}
+                onChange={(e) =>
+                  setDeadliftPr(Math.min(Number(e.target.value), 501))
+                }
+                className="w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] mb-2"
+                required
+              />
+            </div>
+          </div>
           {error && <p className="text-red-500 mb-4">{error}</p>}
-          <button type="submit" className="btn w-full">
+          <button type="submit" className="btn w-full mt-2">
             Submit
           </button>
         </form>
