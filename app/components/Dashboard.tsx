@@ -13,6 +13,7 @@ import DashboardFriendsScreen from "./dashboard-screens/friends"; // Import Frie
 import Popup from "./Popup";
 import { Screen } from "../types/screen";
 import { Profile } from "../types/profile";
+import DashboardNotificationsScreen from "./dashboard-screens/notifications";
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -154,6 +155,8 @@ export default function Dashboard() {
         <DashboardHistoryScreen />
       ) : currentScreen === "friends" ? (
         <DashboardFriendsScreen profile={profile} />
+      ) : currentScreen === "notifications" ? (
+        <DashboardNotificationsScreen />
       ) : null}
       {showPopup && <Popup onClose={togglePopup} userId={profile?.id} />}
     </div>

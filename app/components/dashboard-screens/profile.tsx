@@ -25,10 +25,17 @@ const DashboardProfileScreen = ({
 
   // Function to check if the username is taken
   const checkUsernameAvailability = async (username: string) => {
+    const { data: userData } = await supabase.auth.getUser();
+    if (!userData.user) {
+      setError("User not authenticated");
+      return false;
+    }
+
     const { data, error } = await supabase
       .from("profiles")
       .select("id")
-      .eq("username", username);
+      .eq("username", username)
+      .neq("id", userData.user.id); // Exclude current user's ID
 
     if (error) {
       setError("An error occurred while checking the username");
@@ -106,7 +113,7 @@ const DashboardProfileScreen = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
             className={`w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] ${
-              isMobileMenuOpen && "hidden"
+              isMobileMenuOpen && "hidden md:flex"
             }`}
             disabled={!isEditing}
           />
@@ -120,7 +127,7 @@ const DashboardProfileScreen = ({
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className={`w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] ${
-              isMobileMenuOpen && "hidden"
+              isMobileMenuOpen && "hidden md:flex"
             }`}
             disabled={!isEditing}
           />
@@ -133,7 +140,7 @@ const DashboardProfileScreen = ({
             value={heightCm ?? ""}
             onChange={(e) => setHeightCm(Math.min(Number(e.target.value), 240))}
             className={`w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] ${
-              isMobileMenuOpen && "hidden"
+              isMobileMenuOpen && "hidden md:flex"
             }`}
             disabled={!isEditing}
           />
@@ -145,7 +152,7 @@ const DashboardProfileScreen = ({
             value={weightKg ?? ""}
             onChange={(e) => setWeightKg(Math.min(Number(e.target.value), 500))}
             className={`w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] ${
-              isMobileMenuOpen && "hidden"
+              isMobileMenuOpen && "hidden md:flex"
             }`}
             disabled={!isEditing}
           />
@@ -157,7 +164,7 @@ const DashboardProfileScreen = ({
             value={birthday}
             onChange={(e) => setBirthday(e.target.value)}
             className={`w-full p-2 text-black border-2 focus:outline-none border-black hover:border-brandGreen hover:border-4 hover:p-1.5 ease-in-out transition-all h-[48px] ${
-              isMobileMenuOpen && "hidden"
+              isMobileMenuOpen && "hidden md:flex"
             }`}
             disabled={!isEditing}
           />

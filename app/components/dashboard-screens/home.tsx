@@ -146,7 +146,7 @@ const DashboardHomeScreen = ({
         <h2 className="text-3xl font-semibold">Current PRs</h2>
         <div
           className={`${
-            isMobileMenuOpen && "hidden"
+            isMobileMenuOpen && "hidden md:flex"
           } flex flex-row gap-2 overflow-x-scroll xl:overflow-x-hidden`}
         >
           {[
@@ -201,7 +201,7 @@ const DashboardHomeScreen = ({
         <h2 className="text-3xl font-semibold">Personal Info</h2>
         <div
           className={`${
-            isMobileMenuOpen && "hidden"
+            isMobileMenuOpen && "hidden md:flex"
           } flex flex-row gap-2 overflow-x-scroll xl:overflow-x-hidden`}
         >
           <div className="h-[112px] min-w-[200px] md:w-[288px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-3.5 transition-all ease-in-out p-4 gap-1 flex flex-col">

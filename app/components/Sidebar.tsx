@@ -5,6 +5,7 @@ import {
   History,
   UserPen,
   Users,
+  BellDot,
   LogOut,
   ToggleLeft,
   ToggleRight,
@@ -79,52 +80,60 @@ const Sidebar = ({
 
           <div className="w-full h-0.5 bg-brandGreen"></div>
           {/* Navigation Buttons */}
-          {["home", "history", "profile", "friends"].map((screen) => (
-            <button
-              key={screen}
-              onClick={() => {
-                handleScreenChange(screen as Screen);
-                toggleMobileMenu();
-              }}
-              className={`flex flex-row gap-4 px-3 ${
-                currentScreen !== screen && "hover:bg-mutedGreen"
-              } transition-all ease-in-out py-3 items-center text-lg group ${
-                currentScreen === screen ? "bg-brandGreen text-black" : ""
-              }`}
-            >
-              <div
-                className={`flex justify-center items-center rounded-2xl w-[44px] h-[32px] text-2xl ${
-                  currentScreen !== screen && "group-hover:bg-brandGreen"
-                } ${currentScreen === screen ? "bg-black" : "bg-[#2a3013]"}`}
+          {["home", "history", "profile", "friends", "notifications"].map(
+            (screen) => (
+              <button
+                key={screen}
+                onClick={() => {
+                  handleScreenChange(screen as Screen);
+                  toggleMobileMenu();
+                }}
+                className={`flex flex-row gap-4 px-3 ${
+                  currentScreen !== screen && "hover:bg-mutedGreen"
+                } transition-all ease-in-out py-3 items-center text-lg group ${
+                  currentScreen === screen ? "bg-brandGreen text-black" : ""
+                }`}
               >
-                {screen === "home" && (
-                  <Home
-                    color={currentScreen === screen ? "#d2f65a" : "black"}
-                    size={20}
-                  />
-                )}
-                {screen === "history" && (
-                  <History
-                    color={currentScreen === screen ? "#d2f65a" : "black"}
-                    size={20}
-                  />
-                )}
-                {screen === "profile" && (
-                  <UserPen
-                    color={currentScreen === screen ? "#d2f65a" : "black"}
-                    size={20}
-                  />
-                )}
-                {screen === "friends" && (
-                  <Users
-                    color={currentScreen === screen ? "#d2f65a" : "black"}
-                    size={20}
-                  />
-                )}
-              </div>
-              <p>{screen.charAt(0).toUpperCase() + screen.slice(1)}</p>
-            </button>
-          ))}
+                <div
+                  className={`flex justify-center items-center rounded-2xl w-[44px] h-[32px] text-2xl ${
+                    currentScreen !== screen && "group-hover:bg-brandGreen"
+                  } ${currentScreen === screen ? "bg-black" : "bg-[#2a3013]"}`}
+                >
+                  {screen === "home" && (
+                    <Home
+                      color={currentScreen === screen ? "#d2f65a" : "black"}
+                      size={20}
+                    />
+                  )}
+                  {screen === "history" && (
+                    <History
+                      color={currentScreen === screen ? "#d2f65a" : "black"}
+                      size={20}
+                    />
+                  )}
+                  {screen === "profile" && (
+                    <UserPen
+                      color={currentScreen === screen ? "#d2f65a" : "black"}
+                      size={20}
+                    />
+                  )}
+                  {screen === "friends" && (
+                    <Users
+                      color={currentScreen === screen ? "#d2f65a" : "black"}
+                      size={20}
+                    />
+                  )}
+                  {screen === "notifications" && (
+                    <BellDot
+                      color={currentScreen === screen ? "#d2f65a" : "black"}
+                      size={20}
+                    />
+                  )}
+                </div>
+                <p>{screen.charAt(0).toUpperCase() + screen.slice(1)}</p>
+              </button>
+            )
+          )}
 
           {/* Thief of Joy Toggle */}
           <button

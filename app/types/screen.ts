@@ -1,1 +1,6 @@
-export type Screen = "home" | "profile" | "history" | "friends";
+export type Screen =
+  | "home"
+  | "profile"
+  | "history"
+  | "friends"
+  | "notifications";
