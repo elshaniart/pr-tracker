@@ -221,7 +221,13 @@ const DashboardHomeScreen = ({
                 ? (weight_kg / (height_cm / 100) ** 2).toFixed(1)
                 : "N/A"}
             </p>
-            <p className={`text-sm font-semibold ${color}`}>{category}</p>
+            <p
+              className={`text-sm font-semibold ${color} ${
+                !profile?.thiefofjoy ? "hidden" : "flex"
+              }`}
+            >
+              {category}
+            </p>
           </div>
         </div>
       </div>
