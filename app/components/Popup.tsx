@@ -67,7 +67,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId, profile }) => {
 
     try {
       // Insert PR
-      const { data: prData, error: prError } = await supabase
+      const { error: prError } = await supabase
         .from("prs")
         .insert([{ exercise, value_kg: valueKg, date, user_id: userId }])
         .single();
