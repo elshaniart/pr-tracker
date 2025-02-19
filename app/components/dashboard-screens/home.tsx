@@ -251,6 +251,7 @@ const DashboardHomeScreen = ({
             prData={prData}
             thiefOfJoy={profile?.thiefofjoy || false}
             exerciseType={selectedExercise}
+            userId={profile?.id}
           />
         </div>
       </div>

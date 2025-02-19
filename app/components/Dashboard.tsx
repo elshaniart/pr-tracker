@@ -158,7 +158,9 @@ export default function Dashboard() {
       ) : currentScreen === "notifications" ? (
         <DashboardNotificationsScreen />
       ) : null}
-      {showPopup && <Popup onClose={togglePopup} userId={profile?.id} />}
+      {showPopup && (
+        <Popup profile={profile} onClose={togglePopup} userId={profile?.id} />
+      )}
     </div>
   );
 }

@@ -2,13 +2,15 @@
 
 import React, { useState } from "react";
 import supabase from "../helper/supabaseClient";
+import { Profile } from "../types/profile";
 
 interface PopupProps {
   onClose: () => void;
   userId: string;
+  profile: Profile;
 }
 
-const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
+const Popup: React.FC<PopupProps> = ({ onClose, userId, profile }) => {
   const [exercise, setExercise] = useState<"bench" | "deadlift" | "squat">(
     "bench"
   );
@@ -65,13 +67,14 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
 
     try {
       // Insert PR
-      const { error: prError } = await supabase
+      const { data: prData, error: prError } = await supabase
         .from("prs")
-        .insert([{ exercise, value_kg: valueKg, date, user_id: userId }]);
+        .insert([{ exercise, value_kg: valueKg, date, user_id: userId }])
+        .single();
 
       if (prError) throw new Error(`PR insertion failed: ${prError.message}`);
 
-      // Update profile
+      // Update profile with the new PR
       const updateData: Record<string, number | null> = {};
       if (exercise === "bench") updateData.bench_press_pr = valueKg;
       if (exercise === "squat") updateData.squat_pr = valueKg;
@@ -85,8 +88,32 @@ const Popup: React.FC<PopupProps> = ({ onClose, userId }) => {
       if (profileError)
         throw new Error(`Profile update failed: ${profileError.message}`);
 
-      onClose(); // Close the popup
-      window.location.reload(); // Refresh the page to reflect the new PR
+      // Prepare notification text
+      const notificationText = `${profile.name} new ${
+        exercise.charAt(0).toUpperCase() + exercise.slice(1)
+      } PR: ${valueKg}kg`;
+
+      // Insert a single notification for all friends
+      const { error: notificationError } = await supabase
+        .from("notifications")
+        .insert([
+          {
+            text: notificationText,
+            recipients: profile.friends || [], // Send to all friends by their IDs (empty array if no friends)
+            creator_id: userId,
+            date: new Date().toISOString(),
+            opened_by: [], // Start with an empty opened_by array
+          },
+        ]);
+
+      if (notificationError)
+        throw new Error(
+          `Notification creation failed: ${notificationError.message}`
+        );
+
+      // Close the popup and refresh the page
+      onClose();
+      window.location.reload();
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error:", error.message);

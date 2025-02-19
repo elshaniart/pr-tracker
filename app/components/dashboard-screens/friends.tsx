@@ -16,7 +16,7 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
   const [friendUsername, setFriendUsername] = useState<string>(""); // Track the username to add
   const [error, setError] = useState<string>("");
 
-  const { username } = profile;
+  const { username, id: userId } = profile;
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -25,7 +25,7 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .in("username", profile.friends)
+        .in("id", profile.friends) // Use IDs to fetch friends
         .order("name", { ascending: true });
 
       if (error) {
@@ -68,14 +68,8 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
     }
 
     // Check if the friend is already in the current user's friends list
-    if (profile.friends?.includes(friendUsername)) {
+    if (profile.friends?.includes(friendData.id)) {
       setError("This user is already in your friends list.");
-      return;
-    }
-
-    // Check if the current user is already in the friend's friends list
-    if (friendData.friends?.includes(username)) {
-      setError("You are already friends with this user.");
       return;
     }
 
@@ -83,9 +77,9 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
     const { error: addFriendError } = await supabase
       .from("profiles")
       .update({
-        friends: [...(friendData.friends || []), username],
+        friends: [...(friendData.friends || []), userId], // Use IDs
       })
-      .eq("username", friendUsername);
+      .eq("id", friendData.id);
 
     if (addFriendError) {
       setError("Error adding friend to the friend's list.");
@@ -96,9 +90,9 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
     const { error: addCurrentUserError } = await supabase
       .from("profiles")
       .update({
-        friends: [...(profile.friends || []), friendUsername],
+        friends: [...(profile.friends || []), friendData.id], // Use IDs
       })
-      .eq("username", username);
+      .eq("id", userId);
 
     if (addCurrentUserError) {
       setError("Error adding friend to your list.");
@@ -108,23 +102,40 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
     // Update the local state to reflect the changes
     setFriends((prevFriends) => [
       ...prevFriends,
-      { ...friendData, username: friendUsername }, // Add the friend's data
+      { ...friendData, username: friendData.username }, // Add the friend's data
     ]);
+
+    // Create a notification for the user who was added
+    const notificationText = `${profile.name} added you as a friend`;
+    const newNotification = {
+      text: notificationText,
+      date: new Date().toISOString(),
+      creator_id: userId, // The user who sent the friend request
+      recipients: [friendData.id], // The user who was added (by their ID)
+      opened_by: [],
+    };
+
+    const { error: notificationError } = await supabase
+      .from("notifications")
+      .insert(newNotification);
+
+    if (notificationError) {
+      console.error("Error creating notification:", notificationError);
+    }
 
     // Clear the input and error state
     setFriendUsername("");
     setError("");
   };
 
-  const handleRemoveFriend = async (friendUsernameToRemove: string | null) => {
-    if (!username) return;
-    if (!friendUsernameToRemove) return;
+  const handleRemoveFriend = async (friendIdToRemove: string | null) => {
+    if (!userId || !friendIdToRemove) return;
 
     // Remove the current user from the friend's friends array
     const { data: friendData, error: friendError } = await supabase
       .from("profiles")
       .select("friends")
-      .eq("username", friendUsernameToRemove)
+      .eq("id", friendIdToRemove)
       .single(); // Fetch the friend's friends array
 
     if (friendError || !friendData) {
@@ -133,13 +144,13 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
     }
 
     const updatedFriendFriends = friendData.friends?.filter(
-      (friend: string) => friend !== username
+      (friend: string) => friend !== userId
     );
 
     const { error: removeFromFriendError } = await supabase
       .from("profiles")
       .update({ friends: updatedFriendFriends })
-      .eq("username", friendUsernameToRemove);
+      .eq("id", friendIdToRemove);
 
     if (removeFromFriendError) {
       console.error(
@@ -150,13 +161,13 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
 
     // Remove the friend from the current user's friends array
     const updatedFriends = profile?.friends?.filter(
-      (friend: string) => friend !== friendUsernameToRemove
+      (friendId: string) => friendId !== friendIdToRemove
     );
 
     const { error: removeFromUserError } = await supabase
       .from("profiles")
       .update({ friends: updatedFriends })
-      .eq("username", username);
+      .eq("id", userId);
 
     if (removeFromUserError) {
       console.error(
@@ -164,9 +175,7 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
         removeFromUserError
       );
     } else {
-      setFriends(
-        friends.filter((friend) => friend.username !== friendUsernameToRemove)
-      );
+      setFriends(friends.filter((friend) => friend.id !== friendIdToRemove));
     }
   };
 
@@ -229,7 +238,7 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
                   </td>
                   <td className="p-4">
                     <button
-                      onClick={() => handleRemoveFriend(friend.username)}
+                      onClick={() => handleRemoveFriend(friend.id)}
                       className="flex items-center"
                     >
                       <Trash2 color="#E31A1A" size={24} />

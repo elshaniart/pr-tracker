@@ -86,7 +86,7 @@ const Sidebar = ({
                 key={screen}
                 onClick={() => {
                   handleScreenChange(screen as Screen);
-                  toggleMobileMenu();
+                  if (window.innerWidth < 768) toggleMobileMenu();
                 }}
                 className={`flex flex-row gap-4 px-3 ${
                   currentScreen !== screen && "hover:bg-mutedGreen"
