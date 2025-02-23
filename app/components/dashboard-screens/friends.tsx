@@ -182,7 +182,7 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
   return (
     <div className="w-full h-full text-black py-8 md:pr-0 flex flex-col gap-8 max-w-screen px-4">
       <h2 className="text-3xl font-semibold mt-16 md:mt-0">Friends</h2>
-      <div className="flex gap-8 items-center">
+      <div className="flex flex-col md:flex-row gap-8 md:items-center">
         <p className="text-lg font-semibold">Username: {username + ""}</p>
         <div className="flex items-center gap-2">
           <input
@@ -205,13 +205,25 @@ const DashboardFriendsScreen: React.FC<DashboardFriendsScreenProps> = ({
         <table className="w-[100%] md:w-[88%] text-left border-collapse">
           <thead>
             <tr className="bg-brandGreen">
-              <th className="p-4 text-sm md:text-base">Name</th>
-              <th className="p-4 text-sm md:text-base">Weight (kg)</th>
-              <th className="p-4 text-sm md:text-base">Height (cm)</th>
-              <th className="p-4 text-sm md:text-base">Bench PR</th>
-              <th className="p-4 text-sm md:text-base">Squat PR</th>
-              <th className="p-4 text-sm md:text-base">Deadlift PR</th>
-              <th className="p-4 text-sm md:text-base">Actions</th>
+              <th className="p-4 text-sm md:text-base min-w-[160px]">Name</th>
+              <th className="p-4 text-sm md:text-base min-w-[136px]">
+                Weight (kg)
+              </th>
+              <th className="p-4 text-sm md:text-base min-w-[136px]">
+                Height (cm)
+              </th>
+              <th className="p-4 text-sm md:text-base min-w-[136px]">
+                Bench PR
+              </th>
+              <th className="p-4 text-sm md:text-base min-w-[136px]">
+                Squat PR
+              </th>
+              <th className="p-4 text-sm md:text-base min-w-[136px]">
+                Deadlift PR
+              </th>
+              <th className="p-4 text-sm md:text-base min-w-[144px]">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>

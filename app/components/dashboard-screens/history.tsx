@@ -93,7 +93,7 @@ const DashboardHistoryScreen = () => {
 
       {/* Filter by Exercise */}
       <div className="flex gap-4 items-center">
-        <label className="text-xl font-semibold">Filter by Exercise:</label>
+        <label className="md:text-xl font-semibold">Filter by Exercise:</label>
         <select
           value={selectedExercise}
           onChange={(e) => setSelectedExercise(e.target.value)}
@@ -112,7 +112,9 @@ const DashboardHistoryScreen = () => {
           <thead>
             <tr className="bg-brandGreen">
               <th className="p-4 text-sm md:text-base">Exercise</th>
-              <th className="p-4 text-sm md:text-base">Weight (kg)</th>
+              <th className="p-4 text-sm md:text-base min-w-[128px]">
+                Weight (kg)
+              </th>
               <th className="p-4 text-sm md:text-base">Date</th>
               <th className="p-4 text-sm md:text-base">Actions</th>
             </tr>

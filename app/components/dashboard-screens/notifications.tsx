@@ -132,57 +132,60 @@ const DashboardNotificationsScreen = () => {
           Unread
         </button>
       </div>
-
-      <table className="w-[100%] md:w-[88%] text-left border-collapse">
-        <thead>
-          <tr className="bg-brandGreen">
-            <th className="p-4 text-sm md:text-base">Date</th>
-            <th className="p-4 text-sm md:text-base">Text</th>
-            <th className="p-4 text-sm md:text-base">From</th>
-            <th className="p-4 text-sm md:text-base">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredNotifications.length > 0 ? (
-            filteredNotifications.map((notif) => (
-              <tr key={notif.id} className="border-b border-black">
-                <td className="px-4 py-2 text-sm md:text-base">
-                  {notif?.date
-                    ? new Date(notif.date).toLocaleDateString("en-GB")
-                    : "N/A"}
-                </td>
-                <td className="px-4 py-2 text-sm md:text-base">{notif.text}</td>
-                <td className="px-4 py-2 text-sm md:text-base">
-                  <SenderName creatorId={notif.creator_id} />
-                </td>
-                <td className="px-4 py-2">
-                  {notif?.opened_by?.includes(userId!) ? (
-                    <button
-                      onClick={() => toggleReadStatus(notif.id, true)}
-                      className="btn-alt"
-                    >
-                      Mark Unread
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => toggleReadStatus(notif.id, false)}
-                      className="btn"
-                    >
-                      Mark Read
-                    </button>
-                  )}
+      <div className="overflow-x-auto">
+        <table className="w-[100%] md:w-[88%] text-left border-collapse">
+          <thead>
+            <tr className="bg-brandGreen">
+              <th className="p-4 text-sm md:text-base min-w-8">Date</th>
+              <th className="p-4 text-sm md:text-base min-w-80">Text</th>
+              <th className="p-4 text-sm md:text-base min-w-[136px]">From</th>
+              <th className="p-4 text-sm md:text-base min-w-[160px]">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredNotifications.length > 0 ? (
+              filteredNotifications.map((notif) => (
+                <tr key={notif.id} className="border-b border-black">
+                  <td className="px-4 py-2 text-sm md:text-base">
+                    {notif?.date
+                      ? new Date(notif.date).toLocaleDateString("en-GB")
+                      : "N/A"}
+                  </td>
+                  <td className="px-4 py-2 text-sm md:text-base">
+                    {notif.text}
+                  </td>
+                  <td className="px-4 py-2 text-sm md:text-base">
+                    <SenderName creatorId={notif.creator_id} />
+                  </td>
+                  <td className="px-4 py-2">
+                    {notif?.opened_by?.includes(userId!) ? (
+                      <button
+                        onClick={() => toggleReadStatus(notif.id, true)}
+                        className="btn-alt"
+                      >
+                        Mark Unread
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => toggleReadStatus(notif.id, false)}
+                        className="btn"
+                      >
+                        Mark Read
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} className="p-4 text-center text-gray-500">
+                  No notifications found.
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={4} className="p-4 text-center text-gray-500">
-                No notifications found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

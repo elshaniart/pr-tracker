@@ -235,7 +235,9 @@ const DashboardHomeScreen = ({
       {/* Exercise Selector and Line Chart */}
       <div className="hidden md:flex text-black flex-col gap-2 px-4 md:px-0">
         <div className="flex gap-2 items-center">
-          <label className="text-xl font-semibold">Select Exercise:</label>
+          <label className="text-lg md:text-xl font-semibold">
+            Select Exercise:
+          </label>
           <select
             value={selectedExercise}
             onChange={(e) => setSelectedExercise(e.target.value)}
@@ -246,7 +248,7 @@ const DashboardHomeScreen = ({
             <option value="deadlift">Deadlift</option>
           </select>
         </div>
-        <div className="w-full pb-12 pt-8">
+        <div className="hidden md:flex w-full pb-12 pt-8">
           <LineChart
             prData={prData}
             thiefOfJoy={profile?.thiefofjoy || false}
