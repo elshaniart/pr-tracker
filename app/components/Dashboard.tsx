@@ -14,6 +14,8 @@ import Popup from "./Popup";
 import { Screen } from "../types/screen";
 import { Profile } from "../types/profile";
 import DashboardNotificationsScreen from "./dashboard-screens/notifications";
+import Loading from "../loading";
+import DashboardExercisesScreen from "./dashboard-screens/exercises";
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -115,7 +117,7 @@ export default function Dashboard() {
   }, [router]);
 
   if (!profile) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (!profile.onboarded && !isOnboardingComplete) {
@@ -157,6 +159,8 @@ export default function Dashboard() {
         <DashboardFriendsScreen profile={profile} />
       ) : currentScreen === "notifications" ? (
         <DashboardNotificationsScreen />
+      ) : currentScreen === "exercises" ? (
+        <DashboardExercisesScreen />
       ) : null}
       {showPopup && (
         <Popup profile={profile} onClose={togglePopup} userId={profile?.id} />

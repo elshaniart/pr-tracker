@@ -8,11 +8,13 @@ import { signInWithGoogle } from "./helper/authHelpers"; // Import the signInWit
 import Dashboard from "./components/Dashboard";
 
 import { Montserrat } from "next/font/google";
+import Loading from "./loading";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null); // State to store the user's authentication status
+  const [loading, setLoading] = useState(true);
   const router = useRouter(); // Next.js router for navigation
 
   // Check if the user is signed in
@@ -22,10 +24,12 @@ export default function Home() {
 
       if (error) {
         console.error("Error fetching session:", error);
+        setLoading(false);
       }
 
       if (data?.session) {
         setUser(data.session.user);
+        setLoading(false);
       }
     };
 
@@ -58,6 +62,10 @@ export default function Home() {
       console.error("Error signing in with Google:", error);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import {
   Home,
   Plus,
@@ -6,6 +8,7 @@ import {
   UserPen,
   Users,
   BellDot,
+  Dumbbell,
   LogOut,
   ToggleLeft,
   ToggleRight,
@@ -13,6 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { Screen } from "../types/screen";
+import supabase from "../helper/supabaseClient";
 
 interface SidebarProps {
   signOut: () => void;
@@ -38,6 +42,31 @@ const Sidebar = ({
   toggleMobileMenu,
 }: SidebarProps) => {
   const [isSwitchDisabled, setIsSwitchDisabled] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
+      if (userError || !userData?.user) return;
+
+      const { data: notificationsData, error: notificationsError } =
+        await supabase
+          .from("notifications")
+          .select("*")
+          .contains("recipients", [userData.user.id]);
+
+      if (notificationsError) return;
+
+      const unreadCount = notificationsData.filter(
+        (notif) => !notif.opened_by?.includes(userData.user.id)
+      ).length;
+
+      setUnreadCount(unreadCount); // update count only once
+    };
+
+    fetchNotifications();
+  }, []);
 
   const handleThiefOfJoyToggle = async () => {
     if (isSwitchDisabled) return;
@@ -80,60 +109,76 @@ const Sidebar = ({
 
           <div className="w-full h-0.5 bg-brandGreen"></div>
           {/* Navigation Buttons */}
-          {["home", "history", "profile", "friends", "notifications"].map(
-            (screen) => (
-              <button
-                key={screen}
-                onClick={() => {
-                  handleScreenChange(screen as Screen);
-                  if (window.innerWidth < 768) toggleMobileMenu();
-                }}
-                className={`flex flex-row gap-4 px-3 ${
-                  currentScreen !== screen && "hover:bg-mutedGreen"
-                } transition-all ease-in-out py-3 items-center text-lg group ${
-                  currentScreen === screen ? "bg-brandGreen text-black" : ""
-                }`}
+          {[
+            "home",
+            "history",
+            "profile",
+            "friends",
+            "notifications",
+            "exercises",
+          ].map((screen) => (
+            <button
+              key={screen}
+              onClick={() => {
+                handleScreenChange(screen as Screen);
+                if (window.innerWidth < 768) toggleMobileMenu();
+              }}
+              className={`flex flex-row gap-4 px-3 ${
+                currentScreen !== screen && "hover:bg-mutedGreen"
+              } transition-all ease-in-out py-3 items-center text-lg group ${
+                currentScreen === screen ? "bg-brandGreen text-black" : ""
+              }`}
+            >
+              <div
+                className={`flex justify-center items-center rounded-2xl w-[44px] h-[32px] text-2xl ${
+                  currentScreen !== screen && "group-hover:bg-brandGreen"
+                } ${currentScreen === screen ? "bg-black" : "bg-[#2a3013]"}`}
               >
-                <div
-                  className={`flex justify-center items-center rounded-2xl w-[44px] h-[32px] text-2xl ${
-                    currentScreen !== screen && "group-hover:bg-brandGreen"
-                  } ${currentScreen === screen ? "bg-black" : "bg-[#2a3013]"}`}
-                >
-                  {screen === "home" && (
-                    <Home
-                      color={currentScreen === screen ? "#d2f65a" : "black"}
-                      size={20}
-                    />
-                  )}
-                  {screen === "history" && (
-                    <History
-                      color={currentScreen === screen ? "#d2f65a" : "black"}
-                      size={20}
-                    />
-                  )}
-                  {screen === "profile" && (
-                    <UserPen
-                      color={currentScreen === screen ? "#d2f65a" : "black"}
-                      size={20}
-                    />
-                  )}
-                  {screen === "friends" && (
-                    <Users
-                      color={currentScreen === screen ? "#d2f65a" : "black"}
-                      size={20}
-                    />
-                  )}
-                  {screen === "notifications" && (
-                    <BellDot
-                      color={currentScreen === screen ? "#d2f65a" : "black"}
-                      size={20}
-                    />
-                  )}
-                </div>
-                <p>{screen.charAt(0).toUpperCase() + screen.slice(1)}</p>
-              </button>
-            )
-          )}
+                {screen === "home" && (
+                  <Home
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
+                    size={20}
+                  />
+                )}
+                {screen === "history" && (
+                  <History
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
+                    size={20}
+                  />
+                )}
+                {screen === "profile" && (
+                  <UserPen
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
+                    size={20}
+                  />
+                )}
+                {screen === "friends" && (
+                  <Users
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
+                    size={20}
+                  />
+                )}
+                {screen === "notifications" && (
+                  <BellDot
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
+                    size={20}
+                  />
+                )}
+                {screen === "exercises" && (
+                  <Dumbbell
+                    color={currentScreen === screen ? "#d2f65a" : "black"}
+                    size={20}
+                  />
+                )}
+              </div>
+              <p>{screen.charAt(0).toUpperCase() + screen.slice(1)}</p>
+              {screen === "notifications" && unreadCount > 0 && (
+                <p className="text-sm ml-8 h-4 w-4 flex items-center justify-center bg-brandGreen rounded-full text-black">
+                  {unreadCount}
+                </p>
+              )}
+            </button>
+          ))}
 
           {/* Thief of Joy Toggle */}
           <button

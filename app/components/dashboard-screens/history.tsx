@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import supabase from "../../helper/supabaseClient";
-import { Trash2 } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
+import EditPrPopup from "../EditPrPopup";
 
 interface PR {
   id: string;
@@ -20,6 +21,8 @@ const DashboardHistoryScreen = () => {
     squat: null,
     deadlift: null,
   });
+  const [showPopup, setShowPopup] = useState(false);
+  const [prToEdit, setPrToEdit] = useState("");
 
   // Fetch PRs for the currently logged-in user
   useEffect(() => {
@@ -69,6 +72,10 @@ const DashboardHistoryScreen = () => {
     }
   }, [selectedExercise, prs]);
 
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
+  };
+
   // Delete PR
   const handleDelete = async (prId: string, exercise: string) => {
     if (earliestPRs[exercise]?.id === prId) {
@@ -88,64 +95,80 @@ const DashboardHistoryScreen = () => {
   };
 
   return (
-    <div className="w-full h-full text-black py-8 md:pr-0 flex flex-col gap-8 max-w-screen px-4">
-      <h2 className="text-3xl font-semibold mt-16 md:mt-0">PR History</h2>
+    <>
+      {showPopup && <EditPrPopup pr={prToEdit} togglePopup={togglePopup} />}
+      <div className="w-full h-full text-black py-8 md:pr-0 flex flex-col gap-8 max-w-screen px-4">
+        <h2 className="text-3xl font-semibold mt-16 md:mt-0">PR History</h2>
 
-      {/* Filter by Exercise */}
-      <div className="flex gap-4 items-center">
-        <label className="md:text-xl font-semibold">Filter by Exercise:</label>
-        <select
-          value={selectedExercise}
-          onChange={(e) => setSelectedExercise(e.target.value)}
-          className="p-2 bg-white focus:outline-none text-black border-2 hover:border-4 hover:border-brandGreen transition-all ease-in-out hover:p-1.5 border-black h-[48px] flex items-center"
-        >
-          <option value="all">All</option>
-          <option value="bench">Bench Press</option>
-          <option value="squat">Squat</option>
-          <option value="deadlift">Deadlift</option>
-        </select>
-      </div>
+        {/* Filter by Exercise */}
+        <div className="flex gap-4 items-center">
+          <label className="md:text-xl font-semibold">
+            Filter by Exercise:
+          </label>
+          <select
+            value={selectedExercise}
+            onChange={(e) => setSelectedExercise(e.target.value)}
+            className="p-2 bg-white focus:outline-none text-black border-2 hover:border-4 hover:border-brandGreen transition-all ease-in-out hover:p-1.5 border-black h-[48px] flex items-center"
+          >
+            <option value="all">All</option>
+            <option value="bench">Bench Press</option>
+            <option value="squat">Squat</option>
+            <option value="deadlift">Deadlift</option>
+          </select>
+        </div>
 
-      {/* PR Table */}
-      <div className="overflow-x-auto">
-        <table className="w-[100%] md:w-[88%] text-left border-collapse">
-          <thead>
-            <tr className="bg-brandGreen">
-              <th className="p-4 text-sm md:text-base">Exercise</th>
-              <th className="p-4 text-sm md:text-base min-w-[128px]">
-                Weight (kg)
-              </th>
-              <th className="p-4 text-sm md:text-base">Date</th>
-              <th className="p-4 text-sm md:text-base">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredPRs.map((pr) => (
-              <tr key={pr.id} className="border-b border-black">
-                <td className="p-4 capitalize text-sm md:text-base">
-                  {pr.exercise}
-                </td>
-                <td className="p-4 text-sm md:text-base">{pr.value_kg}</td>
-                <td className="p-4 text-sm md:text-base">
-                  {new Date(pr.date).toLocaleDateString()}
-                </td>
-                <td className="p-4">
-                  {/* Show the delete button unless it's the earliest PR for this exercise */}
-                  {earliestPRs[pr.exercise]?.id !== pr.id && (
-                    <button
-                      onClick={() => handleDelete(pr.id, pr.exercise)}
-                      className="flex items-center"
-                    >
-                      <Trash2 color="#E31A1A" size={24} />
-                    </button>
-                  )}
-                </td>
+        {/* PR Table */}
+        <div className="overflow-x-auto">
+          <table className="w-[100%] md:w-[88%] text-left border-collapse">
+            <thead>
+              <tr className="bg-brandGreen">
+                <th className="p-4 text-sm md:text-base">Exercise</th>
+                <th className="p-4 text-sm md:text-base min-w-[128px]">
+                  Weight (kg)
+                </th>
+                <th className="p-4 text-sm md:text-base">Date</th>
+                <th className="p-4 text-sm md:text-base">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredPRs.map((pr) => (
+                <tr key={pr.id} className="border-b border-black">
+                  <td className="p-4 capitalize text-sm md:text-base">
+                    {pr.exercise}
+                  </td>
+                  <td className="p-4 text-sm md:text-base">{pr.value_kg}</td>
+                  <td className="p-4 text-sm md:text-base">
+                    {new Date(pr.date).toLocaleDateString()}
+                  </td>
+                  <td className="p-4 flex gap-2">
+                    {/* Show the delete button unless it's the earliest PR for this exercise */}
+                    {earliestPRs[pr.exercise]?.id !== pr.id && (
+                      <>
+                        <button
+                          onClick={() => handleDelete(pr.id, pr.exercise)}
+                          className="flex items-center"
+                        >
+                          <Trash2 color="#E31A1A" size={24} />
+                        </button>
+                        <button
+                          onClick={() => {
+                            togglePopup();
+                            setPrToEdit(pr.id);
+                          }}
+                          className="flex items-center"
+                        >
+                          <Pencil color="#01B573" size={24} />
+                        </button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
