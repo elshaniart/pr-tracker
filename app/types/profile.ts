@@ -11,4 +11,5 @@ export type Profile = {
   thiefofjoy: boolean; // Add thiefOfJoy to the Profile type
   username: string | null;
   friends: string[] | null;
+  profile_pic: string | null;
 };

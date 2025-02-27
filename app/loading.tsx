@@ -1,9 +1,10 @@
+import Image from "next/image";
 import React from "react";
 
 const Loading = () => {
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <img src="/Loading.gif" alt="" className="h-[128px] w-[128px]" />
+      <Image src="/Loading.gif" alt="" width={128} height={128} />
     </div>
   );
 };
