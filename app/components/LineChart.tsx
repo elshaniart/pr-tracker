@@ -46,7 +46,6 @@ const LineChart = ({
 }: LineChartProps) => {
   const [averageLift, setAverageLift] = useState<number | null>(null);
   const [friendPRs, setFriendPRs] = useState<PRData[]>([]);
-  const [friendAverage, setFriendAverage] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchAverageLift = async () => {
@@ -92,21 +91,12 @@ const LineChart = ({
           if (friendError) throw new Error(friendError.message);
 
           setFriendPRs(friendPRs || []);
-
-          const friendValues = friendPRs.map((pr) => pr.value_kg);
-          const averageFriendLift =
-            friendValues.reduce((sum, value) => sum + value, 0) /
-            friendValues.length;
-
-          setFriendAverage(averageFriendLift || null);
         } else {
           setFriendPRs([]);
-          setFriendAverage(null);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
         setAverageLift(null);
-        setFriendAverage(null);
       }
     };
 
@@ -124,18 +114,9 @@ const LineChart = ({
         if (friendError) throw new Error(friendError.message);
 
         setFriendPRs(friendPRs || []);
-
-        // Calculate the friend's average PR
-        const friendValues = friendPRs.map((pr) => pr.value_kg);
-        const averageFriendLift =
-          friendValues.reduce((sum, value) => sum + value, 0) /
-          friendValues.length;
-
-        setFriendAverage(averageFriendLift || null);
       } catch (error) {
         console.error("Error fetching friend data:", error);
         setFriendPRs([]);
-        setFriendAverage(null);
       }
     };
 
@@ -152,18 +133,6 @@ const LineChart = ({
         borderColor: "rgb(75, 192, 192)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
       },
-      // Always show the friend's average PR line
-      ...(friendAverage !== null
-        ? [
-            {
-              label: "Friend's Avg. PR",
-              data: prData.map(() => friendAverage),
-              borderColor: "rgb(255, 159, 64)",
-              backgroundColor: "rgba(255, 159, 64, 0.2)",
-              borderDash: [10, 5],
-            },
-          ]
-        : []),
       // If a friend is selected, show their PR line
       ...(selectedFriend !== ""
         ? [
