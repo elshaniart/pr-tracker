@@ -34,6 +34,7 @@ interface LineChartProps {
   thiefOfJoy: boolean;
   exerciseType: string;
   userId: string;
+  selectedFriend: string;
 }
 
 const LineChart = ({
@@ -41,8 +42,10 @@ const LineChart = ({
   thiefOfJoy,
   exerciseType,
   userId,
+  selectedFriend,
 }: LineChartProps) => {
   const [averageLift, setAverageLift] = useState<number | null>(null);
+  const [friendPRs, setFriendPRs] = useState<PRData[]>([]);
   const [friendAverage, setFriendAverage] = useState<number | null>(null);
 
   useEffect(() => {
@@ -71,48 +74,58 @@ const LineChart = ({
           })
           .filter((value): value is number => value !== null);
 
-        // Calculate the average lift value
+        // Calculate global average lift
         const average =
           prValues.reduce((sum, value) => sum + value, 0) / prValues.length;
         setAverageLift(average);
+
+        // Only fetch friend's data if a friend is selected
+        if (selectedFriend) {
+          console.log("Fetching data for friend:", selectedFriend);
+
+          const { data: friendPRs, error: friendError } = await supabase
+            .from("prs")
+            .select("date, value_kg")
+            .eq("user_id", selectedFriend)
+            .eq("exercise", exerciseType);
+
+          if (friendError) throw new Error(friendError.message);
+
+          setFriendPRs(friendPRs || []);
+
+          const friendValues = friendPRs.map((pr) => pr.value_kg);
+          const averageFriendLift =
+            friendValues.reduce((sum, value) => sum + value, 0) /
+            friendValues.length;
+
+          setFriendAverage(averageFriendLift || null);
+        } else {
+          setFriendPRs([]);
+          setFriendAverage(null);
+        }
       } catch (error) {
-        console.error("Error fetching average lift:", error);
+        console.error("Error fetching data:", error);
         setAverageLift(null);
+        setFriendAverage(null);
       }
     };
 
-    const fetchFriendAverage = async () => {
+    const fetchFriendData = async () => {
+      if (selectedFriend === "") return; // If no friend selected, do nothing
+
       try {
-        // Get the user's profile to access the friends list
-        const { data: userProfile, error: userError } = await supabase
-          .from("profiles")
-          .select("friends")
-          .eq("id", userId)
-          .single();
-
-        if (userError) throw new Error(userError.message);
-
-        // Check if friends is an array, if not, default to empty array
-        const friendIds = Array.isArray(userProfile?.friends)
-          ? userProfile.friends
-          : [];
-
-        // If no friends, exit early
-        if (friendIds.length === 0) {
-          setFriendAverage(null);
-          return;
-        }
-
-        // Fetch PRs for all friends
+        // Fetch PRs for the selected friend
         const { data: friendPRs, error: friendError } = await supabase
           .from("prs")
-          .select("value_kg, exercise")
-          .in("user_id", friendIds)
+          .select("date, value_kg")
+          .eq("user_id", selectedFriend) // Fetch PRs for the selected friend
           .eq("exercise", exerciseType);
 
         if (friendError) throw new Error(friendError.message);
 
-        // Calculate the average for all friends' PRs
+        setFriendPRs(friendPRs || []);
+
+        // Calculate the friend's average PR
         const friendValues = friendPRs.map((pr) => pr.value_kg);
         const averageFriendLift =
           friendValues.reduce((sum, value) => sum + value, 0) /
@@ -120,14 +133,15 @@ const LineChart = ({
 
         setFriendAverage(averageFriendLift || null);
       } catch (error) {
-        console.error("Error fetching friend average:", error);
+        console.error("Error fetching friend data:", error);
+        setFriendPRs([]);
         setFriendAverage(null);
       }
     };
 
     fetchAverageLift();
-    fetchFriendAverage();
-  }, [exerciseType, userId]);
+    fetchFriendData();
+  }, [exerciseType, userId, selectedFriend]);
 
   const lineChartData = {
     labels: prData.map((pr) => pr.date),
@@ -138,6 +152,29 @@ const LineChart = ({
         borderColor: "rgb(75, 192, 192)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
       },
+      // Always show the friend's average PR line
+      ...(friendAverage !== null
+        ? [
+            {
+              label: "Friend's Avg. PR",
+              data: prData.map(() => friendAverage),
+              borderColor: "rgb(255, 159, 64)",
+              backgroundColor: "rgba(255, 159, 64, 0.2)",
+              borderDash: [10, 5],
+            },
+          ]
+        : []),
+      // If a friend is selected, show their PR line
+      ...(selectedFriend !== ""
+        ? [
+            {
+              label: "Friend's PR",
+              data: friendPRs.map((pr) => pr.value_kg),
+              borderColor: "rgb(54, 162, 235)",
+              backgroundColor: "rgba(54, 162, 235, 0.2)",
+            },
+          ]
+        : []),
       // Average PR line (Thief of Joy)
       ...(thiefOfJoy && averageLift !== null
         ? [
@@ -147,18 +184,6 @@ const LineChart = ({
               borderColor: "rgb(255, 99, 132)",
               backgroundColor: "rgba(255, 99, 132, 0.2)",
               borderDash: [5, 5],
-            },
-          ]
-        : []),
-      // Friend Average PR line
-      ...(friendAverage !== null
-        ? [
-            {
-              label: "Friend Avg.",
-              data: prData.map(() => friendAverage),
-              borderColor: "rgb(54, 162, 235)",
-              backgroundColor: "rgba(54, 162, 235, 0.2)",
-              borderDash: [10, 5],
             },
           ]
         : []),

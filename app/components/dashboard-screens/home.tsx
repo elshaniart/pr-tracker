@@ -30,6 +30,10 @@ const DashboardHomeScreen = ({
   const [prData, setPRData] = useState<{ date: string; value_kg: number }[]>(
     []
   ); // State for PR data
+  const [friends, setFriends] = useState<{ id: string; username: string }[]>(
+    []
+  ); // State for friends list
+  const [selectedFriend, setSelectedFriend] = useState<string>(""); // State for selected friend
 
   const getBMIClassification = (bmi: number) => {
     if (bmi < 16.0)
@@ -130,6 +134,53 @@ const DashboardHomeScreen = ({
 
     fetchPRData();
   }, [selectedExercise]);
+
+  // Fetch the user's friends
+  useEffect(() => {
+    const fetchFriends = async () => {
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
+      if (!userData?.user || userError) {
+        console.error("Error fetching user:", userError);
+        return;
+      }
+
+      // Fetch the user's profile to get the friends list
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("friends")
+        .eq("id", userData.user.id)
+        .single();
+
+      if (profileError || !profileData) {
+        console.error("Error fetching profile:", profileError);
+        return;
+      }
+
+      // Check if friends is an array, if not, default to empty array
+      const friendIds = Array.isArray(profileData.friends)
+        ? profileData.friends
+        : [];
+
+      // Fetch the usernames of the friends
+      if (friendIds.length > 0) {
+        const { data: friendsData, error: friendsError } = await supabase
+          .from("profiles")
+          .select("id, username")
+          .in("id", friendIds);
+
+        if (friendsError) {
+          console.error("Error fetching friends:", friendsError);
+          return;
+        }
+
+        // Set the friends list in state
+        setFriends(friendsData);
+      }
+    };
+
+    fetchFriends();
+  }, []);
 
   const calculatePercentageIncrease = (
     initial: number | undefined,
@@ -247,6 +298,23 @@ const DashboardHomeScreen = ({
             <option value="squat">Squat</option>
             <option value="deadlift">Deadlift</option>
           </select>
+
+          {/* Friend Selector Dropdown */}
+          <label className="text-lg md:text-xl font-semibold ml-4">
+            Select Friend:
+          </label>
+          <select
+            value={selectedFriend}
+            onChange={(e) => setSelectedFriend(e.target.value)}
+            className="p-2 bg-white focus:outline-none text-black border-2 hover:border-4 hover:border-brandGreen transition-all ease-in-out hover:p-1.5 border-black h-[48px] flex items-center"
+          >
+            <option value="">Select a friend</option>
+            {friends.map((friend) => (
+              <option key={friend.id} value={friend.id}>
+                {friend.username}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="hidden md:flex w-full pb-12 pt-8">
           <LineChart
@@ -254,6 +322,7 @@ const DashboardHomeScreen = ({
             thiefOfJoy={profile?.thiefofjoy || false}
             exerciseType={selectedExercise}
             userId={profile?.id}
+            selectedFriend={selectedFriend}
           />
         </div>
       </div>
