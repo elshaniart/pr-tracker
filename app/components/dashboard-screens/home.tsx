@@ -30,10 +30,19 @@ const DashboardHomeScreen = ({
   const [prData, setPRData] = useState<{ date: string; value_kg: number }[]>(
     []
   ); // State for PR data
-  const [friends, setFriends] = useState<{ id: string; username: string }[]>(
-    []
-  ); // State for friends list
+  const [friends, setFriends] = useState<
+    {
+      id: string;
+      username: string;
+      bench: number;
+      squat: number;
+      deadlift: number;
+    }[]
+  >([]); // State for friends list
   const [selectedFriend, setSelectedFriend] = useState<string>(""); // State for selected friend
+  const [activeTab, setActiveTab] = useState<
+    "total" | "bench" | "squat" | "deadlift"
+  >("total");
 
   const getBMIClassification = (bmi: number) => {
     if (bmi < 16.0)
@@ -166,7 +175,7 @@ const DashboardHomeScreen = ({
       if (friendIds.length > 0) {
         const { data: friendsData, error: friendsError } = await supabase
           .from("profiles")
-          .select("id, username")
+          .select("id, username, bench_press_pr, squat_pr, deadlift_pr")
           .in("id", friendIds);
 
         if (friendsError) {
@@ -174,13 +183,39 @@ const DashboardHomeScreen = ({
           return;
         }
 
-        // Set the friends list in state
-        setFriends(friendsData);
+        const formattedFriends = friendsData.map((friend) => ({
+          id: friend.id,
+          username: friend.username,
+          bench: +friend.bench_press_pr || 0,
+          squat: +friend.squat_pr || 0,
+          deadlift: +friend.deadlift_pr || 0,
+        }));
+
+        setFriends(formattedFriends);
       }
     };
 
     fetchFriends();
   }, []);
+
+  const calculateScore = (user: {
+    bench: number;
+    squat: number;
+    deadlift: number;
+  }) => {
+    switch (activeTab) {
+      case "total":
+        return user.bench + user.squat + user.deadlift;
+      case "bench":
+        return user.bench;
+      case "squat":
+        return user.squat;
+      case "deadlift":
+        return user.deadlift;
+      default:
+        return 0;
+    }
+  };
 
   const calculatePercentageIncrease = (
     initial: number | undefined,
@@ -191,60 +226,123 @@ const DashboardHomeScreen = ({
     return increase.toFixed(1);
   };
 
-  return (
-    <div className="w-full h-full max-w-screen text-black py-8 flex flex-col gap-8 px-4">
-      <div className="flex flex-col gap-2 pt-16 md:pt-0 px-4 md:px-0 w-screen lg:w-auto">
-        <h2 className="text-3xl font-semibold">Current PRs</h2>
-        <div
-          className={`${
-            isMobileMenuOpen && "hidden md:flex"
-          } flex flex-row gap-2 overflow-x-scroll xl:overflow-x-hidden`}
-        >
-          {[
-            { name: "Bench Press", current: bench_press_pr, key: "bench" },
-            { name: "Deadlift", current: deadlift_pr, key: "deadlift" },
-            { name: "Squat", current: squat_pr, key: "squat" },
-          ].map(({ name, current, key }) => {
-            const initialPR = initialPRs[key];
-            const percentageIncrease = calculatePercentageIncrease(
-              initialPR,
-              current || 0
-            );
-            const averageScore = averageLifts[key];
+  const allParticipants = [
+    ...friends,
+    {
+      id: profile?.id || "user",
+      username: "You",
+      bench: bench_press_pr,
+      squat: squat_pr,
+      deadlift: deadlift_pr,
+    },
+  ];
 
-            return (
-              <div
-                key={key}
-                className="h-[112px] min-w-[200px] text-black md:w-[288px] bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-3.5 transition-all ease-in-out p-4 gap-1 flex flex-col"
-              >
-                <p className="text-sm leading-3">{name}</p>
-                <div className="flex flex-row gap-2 items-center font-semibold text-sm">
-                  <p className="text-xl font-semibold">{current} kg</p>
-                  {percentageIncrease !== null && (
-                    <p className="text-[#01B574]">(+{percentageIncrease}%)</p>
-                  )}
-                </div>
-                <div
-                  className={`${
-                    !profile?.thiefofjoy ? "hidden" : "flex"
-                  } flex-row gap-2 items-center font-semibold text-sm`}
+  const sortedParticipants = allParticipants.sort(
+    (a, b) =>
+      calculateScore({
+        bench: b.bench ?? 0,
+        squat: b.squat ?? 0,
+        deadlift: b.deadlift ?? 0,
+      }) -
+      calculateScore({
+        bench: a.bench ?? 0,
+        squat: a.squat ?? 0,
+        deadlift: a.deadlift ?? 0,
+      })
+  );
+
+  return (
+    <div className="w-full h-full max-w-screen text-black py-8 flex flex-col gap-4 px-4">
+      <div className="flex flex-col gap-2 pt-16 md:pt-0 px-4 md:px-0 w-screen lg:w-auto">
+        <div className="flex flex-row gap-2">
+          <div
+            className={`${
+              isMobileMenuOpen && "hidden md:flex"
+            } flex flex-col items-center gap-1 w-[352px] h-[352px] border-2 border-black p-4`}
+          >
+            <div className="flex gap-1 mb-4">
+              {["total", "bench", "squat", "deadlift"].map((tab) => (
+                <button
+                  key={tab}
+                  className={`border-b-2 p-2 border-black hover:border-brandGreen transition-all ease-in-out ${
+                    activeTab === tab ? "border-brandGreen" : ""
+                  }`}
+                  onClick={() => setActiveTab(tab as typeof activeTab)}
                 >
-                  <p>Average: </p>
-                  <p
-                    className={` ${
-                      current < averageScore
-                        ? "text-[#E31A1A]"
-                        : current == averageScore
-                        ? "text-[#F6AD55]"
-                        : "text-[#01B574]"
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
+            <div className="w-full h-full overflow-y-auto">
+              {sortedParticipants.map((participant) => {
+                const score = calculateScore(participant);
+                const isUser = participant.id === profile?.id;
+
+                return (
+                  <div
+                    key={participant.id}
+                    className={`flex justify-between p-4 border-b-2 ${
+                      isUser ? "bg-brandGreen/20" : "bg-white"
                     }`}
                   >
-                    {averageScore}
-                  </p>
+                    <p className="font-semibold">{participant.username}</p>
+                    <p>{score} kg</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div
+            className={`${
+              isMobileMenuOpen && "hidden md:flex"
+            } flex flex-col gap-2 overflow-x-scroll xl:overflow-x-hidden`}
+          >
+            {[
+              { name: "Bench Press", current: bench_press_pr, key: "bench" },
+              { name: "Deadlift", current: deadlift_pr, key: "deadlift" },
+              { name: "Squat", current: squat_pr, key: "squat" },
+            ].map(({ name, current, key }) => {
+              const initialPR = initialPRs[key];
+              const percentageIncrease = calculatePercentageIncrease(
+                initialPR,
+                current || 0
+              );
+              const averageScore = averageLifts[key];
+
+              return (
+                <div
+                  key={key}
+                  className="h-[112px] justify-center min-w-[176px] text-black md:w-[256px] bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-2.5 transition-all ease-in-out p-3 gap-1 flex flex-col"
+                >
+                  <p className="text-sm leading-3">{name}</p>
+                  <div className="flex flex-row gap-2 items-center font-semibold text-sm">
+                    <p className="text-xl font-semibold">{current} kg</p>
+                    {percentageIncrease !== null && (
+                      <p className="text-[#01B574]">(+{percentageIncrease}%)</p>
+                    )}
+                  </div>
+                  <div
+                    className={`${
+                      !profile?.thiefofjoy ? "hidden" : "flex"
+                    } flex-row gap-2 items-center font-semibold text-sm`}
+                  >
+                    <p>Average: </p>
+                    <p
+                      className={` ${
+                        current < averageScore
+                          ? "text-[#E31A1A]"
+                          : current == averageScore
+                          ? "text-[#F6AD55]"
+                          : "text-[#01B574]"
+                      }`}
+                    >
+                      {averageScore}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -255,17 +353,17 @@ const DashboardHomeScreen = ({
             isMobileMenuOpen && "hidden md:flex"
           } flex flex-row gap-2 overflow-x-scroll xl:overflow-x-hidden`}
         >
-          <div className="h-[112px] min-w-[200px] md:w-[288px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-3.5 transition-all ease-in-out p-4 gap-1 flex flex-col">
+          <div className="h-[112px] justify-center min-w-[176px] md:w-[256px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-2.5 transition-all ease-in-out p-3 gap-1 flex flex-col">
             <p className="text-sm leading-3">Weight</p>
             <p className="text-xl font-semibold">{weight_kg} kg</p>
           </div>
-          <div className="h-[112px] min-w-[200px] md:w-[288px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-3.5 transition-all ease-in-out p-4 gap-1 flex flex-col">
+          <div className="h-[112px] justify-center min-w-[176px] md:w-[256px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-2.5 transition-all ease-in-out p-3 gap-1 flex flex-col">
             <p className="text-sm leading-3">Height</p>
             <p className="text-xl font-semibold">
               {height_cm ? (height_cm / 100).toFixed(2) + "m" : "N/A"}
             </p>
           </div>
-          <div className="h-[112px] min-w-[200px] md:w-[288px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-3.5 transition-all ease-in-out p-4 gap-1 flex flex-col">
+          <div className="h-[112px] justify-center min-w-[176px] md:w-[256px] text-black bg-white border-2 border-black hover:border-4 hover:border-brandGreen hover:p-2.5 transition-all ease-in-out p-3 gap-1 flex flex-col">
             <p className="text-sm leading-3">BMI</p>
             <p className="text-xl font-semibold">
               {weight_kg && height_cm
