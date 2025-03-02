@@ -260,6 +260,7 @@ const DashboardHomeScreen = ({
               isMobileMenuOpen && "hidden md:flex"
             } flex flex-col items-center gap-1 w-[352px] h-[352px] border-2 border-black p-4`}
           >
+            <h2 className="text-center text-2xl font-semibold">Leaderboard</h2>
             <div className="flex gap-1 mb-4">
               {["total", "bench", "squat", "deadlift"].map((tab) => (
                 <button
@@ -274,7 +275,7 @@ const DashboardHomeScreen = ({
               ))}
             </div>
             <div className="w-full h-full overflow-y-auto">
-              {sortedParticipants.map((participant) => {
+              {sortedParticipants.map((participant, index) => {
                 const score = calculateScore(participant);
                 const isUser = participant.id === profile?.id;
 
@@ -285,6 +286,7 @@ const DashboardHomeScreen = ({
                       isUser ? "bg-brandGreen/20" : "bg-white"
                     }`}
                   >
+                    <p>{index + 1}</p>
                     <p className="font-semibold">{participant.username}</p>
                     <p>{score} kg</p>
                   </div>
