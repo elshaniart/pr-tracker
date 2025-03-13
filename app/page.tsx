@@ -7,10 +7,7 @@ import { User } from "@supabase/supabase-js";
 import { signInWithGoogle } from "./helper/authHelpers"; // Import the signInWithGoogle function
 import Dashboard from "./components/Dashboard";
 
-import { Montserrat } from "next/font/google";
 import Loading from "./loading";
-
-const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null); // State to store the user's authentication status
@@ -72,7 +69,7 @@ export default function Home() {
 
   return (
     <div
-      className={`flex flex-col items-center justify-center min-h-screen bg-white ${montserrat.className}`}
+      className={`flex flex-col items-center justify-center min-h-screen bg-white`}
     >
       {user ? (
         // If the user is signed in, show the Dashboard
