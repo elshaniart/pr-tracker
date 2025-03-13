@@ -4,22 +4,24 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../helper/supabaseClient";
 import { signOut } from "../helper/authHelpers";
-import Sidebar from "./Sidebar";
-import DashboardHomeScreen from "./dashboard-screens/home";
-import DashboardProfileScreen from "./dashboard-screens/profile";
-import DashboardHistoryScreen from "./dashboard-screens/history";
-import DashboardFriendsScreen from "./dashboard-screens/friends"; // Import Friends Screen
-import Popup from "./Popup";
+import DashboardHomeScreen from "../components/dashboard-screens/home";
+import DashboardProfileScreen from "../components/dashboard-screens/profile";
+import DashboardHistoryScreen from "../components/dashboard-screens/history";
+import DashboardFriendsScreen from "../components/dashboard-screens/friends"; // Import Friends Screen
+import Popup from "../components/Popup";
 import { Screen } from "../types/screen";
 import { Profile } from "../types/profile";
-import DashboardNotificationsScreen from "./dashboard-screens/notifications";
+import DashboardNotificationsScreen from "../components/dashboard-screens/notifications";
 import Loading from "../loading";
-import DashboardExercisesScreen from "./dashboard-screens/exercises";
+import DashboardExercisesScreen from "../components/dashboard-screens/exercises";
+import Onboarding from "../components/Onboarding";
+import Sidebar from "../components/Sidebar";
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [currentScreen, setCurrentScreen] = useState<Screen>("home");
   const [showPopup, setShowPopup] = useState(false);
+  const [isOnboardingComplete, setIsOnboardingComplete] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
 
@@ -33,6 +35,11 @@ export default function Dashboard() {
 
   const handleProfileUpdate = (updatedProfile: Profile) => {
     setProfile(updatedProfile);
+  };
+
+  const handleOnboardingComplete = () => {
+    setIsOnboardingComplete(true);
+    window.location.reload();
   };
 
   const handleThiefOfJoyToggle = async (newValue: boolean) => {
@@ -113,8 +120,8 @@ export default function Dashboard() {
     return <Loading />;
   }
 
-  if (!profile.onboarded) {
-    router.push("/onboarding");
+  if (!profile.onboarded && !isOnboardingComplete) {
+    return <Onboarding onComplete={handleOnboardingComplete} />;
   }
 
   return (

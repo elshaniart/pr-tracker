@@ -2,16 +2,13 @@
 
 import React, { useState } from "react";
 import supabase from "../helper/supabaseClient";
+import { useRouter } from "next/navigation";
 
 import { Montserrat } from "next/font/google";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
 
-interface OnboardingProps {
-  onComplete: () => void; // Callback function to notify parent
-}
-
-export default function Onboarding({ onComplete }: OnboardingProps) {
+export default function Onboarding() {
   const [name, setName] = useState("");
   const [username, setUsername] = useState(""); // Added username state
   const [heightCm, setHeightCm] = useState<number | null>(null);
@@ -21,6 +18,12 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [squatPr, setSquatPr] = useState<number | null>(null);
   const [deadliftPr, setDeadliftPr] = useState<number | null>(null);
   const [error, setError] = useState("");
+
+  const router = useRouter();
+
+  const onComplete = () => {
+    router.push("/dashboard");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,9 +105,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <div
-      className={`flex flex-col items-center justify-center min-h-screen min-w-full ${montserrat.className}`}
+      className={`flex flex-col items-center justify-center min-h-screen min-w-full bg-white ${montserrat.className}`}
     >
-      <div className="p-4 text-black border-2 border-black">
+      <div className="p-4 text-black border-2 border-black bg-white">
         <h1 className="text-2xl font-bold mb-4 text-center">Onboarding</h1>
         <form onSubmit={handleSubmit} className="w-80 md:w-96">
           <label>Full Name</label>
