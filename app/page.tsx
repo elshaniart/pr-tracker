@@ -24,10 +24,13 @@ export default function Home() {
 
       if (error) {
         console.error("Error fetching session:", error);
+
         setLoading(false);
       }
 
-      if (data?.session) {
+      if (!data?.session) {
+        setLoading(false);
+      } else {
         setUser(data.session.user);
         setLoading(false);
       }
